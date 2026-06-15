@@ -10,10 +10,20 @@ class AgentRequest(BaseModel):
     session_id: str = Field(..., min_length=1, description="Client session identifier.")
 
 
+class IncidentMatch(BaseModel):
+    """A single incident match returned by semantic search."""
+
+    ticket_id: str
+    issue_name: str
+    category: str
+    subcategory: str
+    score: float
+
+
 class AgentResponse(BaseModel):
     """Structured response returned by the /agent endpoint."""
 
     status: str
     query: str
     session_id: str
-    response: str
+    matches: list[IncidentMatch]
