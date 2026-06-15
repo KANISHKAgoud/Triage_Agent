@@ -8,6 +8,19 @@ from .models import AgentRequest, AgentResponse
 router = APIRouter()
 
 
+@router.get(
+    "/",
+    summary="API health welcome",
+)
+async def read_root() -> dict[str, str]:
+    """Return a simple status message for the API root."""
+
+    return {
+        "message": "Welcome to Triage Agent API",
+        "status": "running",
+    }
+
+
 @router.post(
     "/agent",
     response_model=AgentResponse,

@@ -1,0 +1,802 @@
+[
+  {
+    "issue_name": "Core Banking Portal Timeout",
+    "category": "Network",
+    "subcategory": "Application Connectivity",
+    "symptoms": "Users in the loans department report intermittent timeouts when opening the core banking portal.",
+    "root_cause": "Packet loss on the branch WAN circuit caused unstable application sessions.",
+    "resolution": "Failed over traffic to the secondary MPLS link and opened a carrier ticket for circuit remediation."
+  },
+  {
+    "issue_name": "Outlook Mailbox Not Syncing",
+    "category": "Email",
+    "subcategory": "Mailbox Synchronization",
+    "symptoms": "Employee receives emails on mobile but not in Outlook desktop client.",
+    "root_cause": "Corrupted Outlook OST cache after a forced workstation shutdown.",
+    "resolution": "Recreated the Outlook profile and rebuilt the local mailbox cache."
+  },
+  {
+    "issue_name": "Teller Workstation Boot Failure",
+    "category": "Hardware",
+    "subcategory": "Endpoint Device",
+    "symptoms": "Teller PC shows no bootable device found during morning startup.",
+    "root_cause": "SSD failure detected by hardware diagnostics.",
+    "resolution": "Replaced the SSD, reimaged the workstation, and restored user profile settings."
+  },
+  {
+    "issue_name": "Loan Origination App Crash",
+    "category": "Software",
+    "subcategory": "Business Application",
+    "symptoms": "Loan officers report the application closes when generating amortization schedules.",
+    "root_cause": "Recent application patch introduced a compatibility issue with an older reporting DLL.",
+    "resolution": "Rolled back the affected patch and deployed the vendor hotfix."
+  },
+  {
+    "issue_name": "Suspicious Login Alert",
+    "category": "Security",
+    "subcategory": "Identity Threat",
+    "symptoms": "SIEM generated alerts for successful login from an unusual overseas location.",
+    "root_cause": "User credentials were compromised through a phishing email.",
+    "resolution": "Disabled the account, reset credentials, revoked sessions, and enrolled the user in phishing awareness follow-up."
+  },
+  {
+    "issue_name": "VPN Authentication Failure",
+    "category": "VPN",
+    "subcategory": "Remote Access",
+    "symptoms": "Remote employee cannot connect to VPN and receives MFA validation failed message.",
+    "root_cause": "User changed phones and did not migrate the authenticator app.",
+    "resolution": "Reset MFA registration and verified successful VPN login."
+  },
+  {
+    "issue_name": "New Hire Missing Share Drive Access",
+    "category": "Access Management",
+    "subcategory": "File Share Permissions",
+    "symptoms": "New analyst cannot access the department risk reporting shared drive.",
+    "root_cause": "User was not added to the required Active Directory security group.",
+    "resolution": "Added the user to the approved group after manager authorization."
+  },
+  {
+    "issue_name": "Branch Wi-Fi Degradation",
+    "category": "Network",
+    "subcategory": "Wireless",
+    "symptoms": "Branch employees report slow Wi-Fi and frequent disconnects in customer meeting rooms.",
+    "root_cause": "Access point channel overlap after an automatic RF recalculation.",
+    "resolution": "Adjusted wireless channel plan and reduced transmit power on adjacent access points."
+  },
+  {
+    "issue_name": "Email Delivery Delay",
+    "category": "Email",
+    "subcategory": "Mail Flow",
+    "symptoms": "Internal audit team reports emails delayed by 30 to 45 minutes.",
+    "root_cause": "Email security gateway queue buildup during attachment scanning.",
+    "resolution": "Increased scanning worker capacity and released queued messages."
+  },
+  {
+    "issue_name": "Printer Card Reader Failure",
+    "category": "Hardware",
+    "subcategory": "Secure Printing",
+    "symptoms": "Employees cannot release confidential print jobs using badge authentication.",
+    "root_cause": "Faulty USB badge reader on the multifunction printer.",
+    "resolution": "Replaced the badge reader and re-registered the printer with the print management server."
+  },
+  {
+    "issue_name": "CRM Login Loop",
+    "category": "Software",
+    "subcategory": "SaaS Application",
+    "symptoms": "Relationship managers are redirected repeatedly to the CRM login page.",
+    "root_cause": "Expired SAML signing certificate in the identity provider configuration.",
+    "resolution": "Uploaded the renewed certificate and validated SSO login."
+  },
+  {
+    "issue_name": "Malware Quarantine Event",
+    "category": "Security",
+    "subcategory": "Endpoint Protection",
+    "symptoms": "Endpoint protection quarantined a macro-enabled spreadsheet on a finance workstation.",
+    "root_cause": "User opened a malicious attachment impersonating a vendor invoice.",
+    "resolution": "Removed the file, ran a full endpoint scan, blocked the sender domain, and reported the campaign to security operations."
+  },
+  {
+    "issue_name": "VPN Split Tunnel Misroute",
+    "category": "VPN",
+    "subcategory": "Traffic Routing",
+    "symptoms": "Remote users cannot access the treasury application while connected to VPN.",
+    "root_cause": "Treasury subnet missing from the VPN route policy.",
+    "resolution": "Added the subnet to the VPN access profile and pushed updated routes."
+  },
+  {
+    "issue_name": "Privilege Request Pending Too Long",
+    "category": "Access Management",
+    "subcategory": "Approval Workflow",
+    "symptoms": "Database access request remains pending after two business days.",
+    "root_cause": "Approver mapping pointed to a manager who recently transferred departments.",
+    "resolution": "Updated approval routing and reassigned the access request."
+  },
+  {
+    "issue_name": "ATM Monitoring Dashboard Unreachable",
+    "category": "Network",
+    "subcategory": "Monitoring Connectivity",
+    "symptoms": "Operations team cannot reach the ATM monitoring dashboard from headquarters.",
+    "root_cause": "Firewall rule expired after a temporary change window closed.",
+    "resolution": "Submitted a permanent rule request and restored access after approval."
+  },
+  {
+    "issue_name": "Shared Mailbox Missing",
+    "category": "Email",
+    "subcategory": "Shared Mailbox Access",
+    "symptoms": "Customer service user cannot see the complaints shared mailbox in Outlook.",
+    "root_cause": "Mailbox permission was removed during a quarterly access cleanup.",
+    "resolution": "Reapplied delegated mailbox access with business owner approval."
+  },
+  {
+    "issue_name": "Docking Station Display Failure",
+    "category": "Hardware",
+    "subcategory": "Peripheral",
+    "symptoms": "Laptop works normally but external monitors remain blank when docked.",
+    "root_cause": "Dock firmware was outdated and incompatible with the latest laptop BIOS.",
+    "resolution": "Updated dock firmware and confirmed both monitors were detected."
+  },
+  {
+    "issue_name": "Patch Deployment Failure",
+    "category": "Software",
+    "subcategory": "Endpoint Management",
+    "symptoms": "Several compliance workstations failed monthly patch deployment.",
+    "root_cause": "Endpoint management agent service was stopped on affected machines.",
+    "resolution": "Restarted the agent service and redeployed the patch package."
+  },
+  {
+    "issue_name": "Blocked Phishing Simulation Link",
+    "category": "Security",
+    "subcategory": "Email Security",
+    "symptoms": "Users report security training links are blocked by the web proxy.",
+    "root_cause": "Training vendor domain was not allowlisted in the secure web gateway.",
+    "resolution": "Added the vendor domain to the approved training category."
+  },
+  {
+    "issue_name": "VPN Client Version Rejected",
+    "category": "VPN",
+    "subcategory": "Client Compliance",
+    "symptoms": "Users receive client version not supported when connecting remotely.",
+    "root_cause": "VPN gateway policy was updated to block outdated clients.",
+    "resolution": "Upgraded VPN clients through endpoint management and verified compliance."
+  },
+  {
+    "issue_name": "Account Locked Repeatedly",
+    "category": "Access Management",
+    "subcategory": "Authentication",
+    "symptoms": "User account locks every 15 minutes despite password reset.",
+    "root_cause": "Old password stored in a mobile mail client caused repeated failed logins.",
+    "resolution": "Removed the stale mobile account configuration and unlocked the user account."
+  },
+  {
+    "issue_name": "Trading Floor Latency Spike",
+    "category": "Network",
+    "subcategory": "Low Latency Network",
+    "symptoms": "Traders report delayed market data updates during peak hours.",
+    "root_cause": "QoS policy was not prioritizing market data traffic after a switch replacement.",
+    "resolution": "Restored QoS configuration and monitored latency back to baseline."
+  },
+  {
+    "issue_name": "External Email Rejection",
+    "category": "Email",
+    "subcategory": "Domain Authentication",
+    "symptoms": "Bank emails to a partner are rejected with SPF alignment errors.",
+    "root_cause": "New outbound relay IP was not added to SPF records.",
+    "resolution": "Updated the SPF DNS record and verified successful partner delivery."
+  },
+  {
+    "issue_name": "Branch Scanner Jam Alerts",
+    "category": "Hardware",
+    "subcategory": "Document Scanner",
+    "symptoms": "Check processing scanner repeatedly reports paper jam with no visible obstruction.",
+    "root_cause": "Worn feed rollers caused misfeeds during batch scanning.",
+    "resolution": "Replaced feed rollers and recalibrated the scanner."
+  },
+  {
+    "issue_name": "Excel Add-in Disabled",
+    "category": "Software",
+    "subcategory": "Office Productivity",
+    "symptoms": "Risk analysts cannot load the market risk Excel add-in.",
+    "root_cause": "Add-in was disabled by Office after a previous crash.",
+    "resolution": "Re-enabled the add-in and installed the latest signed version."
+  },
+  {
+    "issue_name": "Unauthorized USB Detection",
+    "category": "Security",
+    "subcategory": "Data Loss Prevention",
+    "symptoms": "DLP console reports attempted use of an unapproved USB storage device.",
+    "root_cause": "Employee connected a personal flash drive to copy presentation files.",
+    "resolution": "Blocked the device, notified compliance, and reminded the user of removable media policy."
+  },
+  {
+    "issue_name": "VPN DNS Resolution Failure",
+    "category": "VPN",
+    "subcategory": "DNS",
+    "symptoms": "Remote users connect to VPN but internal hostnames do not resolve.",
+    "root_cause": "VPN profile assigned an incorrect DNS server after configuration migration.",
+    "resolution": "Corrected DNS server assignment and refreshed VPN client profiles."
+  },
+  {
+    "issue_name": "Terminated User Still Active",
+    "category": "Access Management",
+    "subcategory": "Joiner Mover Leaver",
+    "symptoms": "Access review shows a terminated contractor account still enabled.",
+    "root_cause": "HR termination feed failed due to missing contractor ID mapping.",
+    "resolution": "Disabled the account, removed group memberships, and corrected HR identity mapping."
+  },
+  {
+    "issue_name": "Data Center Switch Port Down",
+    "category": "Network",
+    "subcategory": "Switching",
+    "symptoms": "Payment processing server loses connectivity after cable maintenance.",
+    "root_cause": "Server was patched into a disabled switch port.",
+    "resolution": "Enabled the correct port and updated the rack connectivity record."
+  },
+  {
+    "issue_name": "Mailbox Quota Exceeded",
+    "category": "Email",
+    "subcategory": "Storage",
+    "symptoms": "Executive assistant cannot send emails due to mailbox quota warning.",
+    "root_cause": "Large archived attachments accumulated in Sent Items.",
+    "resolution": "Enabled online archive retention and moved old mail to archive."
+  },
+  {
+    "issue_name": "Laptop Battery Swelling",
+    "category": "Hardware",
+    "subcategory": "Laptop",
+    "symptoms": "User reports trackpad lifting and laptop base bulging.",
+    "root_cause": "Battery swelling due to hardware degradation.",
+    "resolution": "Removed laptop from service and replaced battery under warranty."
+  },
+  {
+    "issue_name": "Document Management Search Broken",
+    "category": "Software",
+    "subcategory": "Enterprise Content Management",
+    "symptoms": "Legal team cannot find indexed loan documents using customer ID search.",
+    "root_cause": "Search indexing service stopped after storage volume reached capacity.",
+    "resolution": "Expanded storage, restarted indexing, and rebuilt affected indexes."
+  },
+  {
+    "issue_name": "Endpoint Encryption Noncompliance",
+    "category": "Security",
+    "subcategory": "Device Compliance",
+    "symptoms": "Compliance dashboard flags several laptops as not encrypted.",
+    "root_cause": "Encryption agent failed to escrow recovery keys after provisioning.",
+    "resolution": "Forced key escrow, confirmed encryption status, and updated compliance records."
+  },
+  {
+    "issue_name": "VPN Access Denied by Region",
+    "category": "VPN",
+    "subcategory": "Geo Policy",
+    "symptoms": "Traveling executive cannot access VPN from an approved business location.",
+    "root_cause": "Geo-IP database incorrectly classified the hotel network country.",
+    "resolution": "Added a temporary exception and updated the geo-IP feed on the VPN gateway."
+  },
+  {
+    "issue_name": "Role Missing in Payments App",
+    "category": "Access Management",
+    "subcategory": "Application RBAC",
+    "symptoms": "Payments analyst cannot approve wire transfer review tasks.",
+    "root_cause": "User was assigned read-only role instead of payment reviewer role.",
+    "resolution": "Updated application role after approval from the payments operations manager."
+  },
+  {
+    "issue_name": "Intermittent VoIP Drops",
+    "category": "Network",
+    "subcategory": "Voice Network",
+    "symptoms": "Contact center agents experience dropped calls during customer verification.",
+    "root_cause": "Voice VLAN had congestion from misclassified backup traffic.",
+    "resolution": "Corrected VLAN assignment and QoS classification for backup traffic."
+  },
+  {
+    "issue_name": "Calendar Free Busy Unavailable",
+    "category": "Email",
+    "subcategory": "Calendar",
+    "symptoms": "Users cannot view availability for treasury team calendars.",
+    "root_cause": "Exchange availability service connector was misconfigured after a hybrid update.",
+    "resolution": "Updated connector settings and restarted the availability service."
+  },
+  {
+    "issue_name": "Conference Room Camera Offline",
+    "category": "Hardware",
+    "subcategory": "Meeting Room Equipment",
+    "symptoms": "Boardroom video meetings start without camera feed.",
+    "root_cause": "USB camera was disconnected from the room controller during maintenance.",
+    "resolution": "Reconnected the camera, secured cabling, and tested the meeting room system."
+  },
+  {
+    "issue_name": "Browser Certificate Warning",
+    "category": "Software",
+    "subcategory": "Browser Configuration",
+    "symptoms": "Users see certificate warnings when accessing the internal HR portal.",
+    "root_cause": "Intermediate CA certificate was missing from the workstation trust store.",
+    "resolution": "Deployed the intermediate certificate through group policy."
+  },
+  {
+    "issue_name": "Privileged Account Misuse Alert",
+    "category": "Security",
+    "subcategory": "Privileged Access",
+    "symptoms": "Security monitoring detects admin login outside the approved change window.",
+    "root_cause": "Administrator used break-glass credentials for non-emergency troubleshooting.",
+    "resolution": "Revoked the session, documented the policy violation, and rotated the break-glass password."
+  },
+  {
+    "issue_name": "VPN MFA Push Timeout",
+    "category": "VPN",
+    "subcategory": "MFA",
+    "symptoms": "Users receive VPN timeout before approving the MFA prompt.",
+    "root_cause": "MFA timeout value was shorter than normal mobile push delivery time.",
+    "resolution": "Adjusted VPN MFA timeout and confirmed successful authentication."
+  },
+  {
+    "issue_name": "Dormant Account Review Failure",
+    "category": "Access Management",
+    "subcategory": "Access Review",
+    "symptoms": "Quarterly access campaign fails to certify dormant accounts.",
+    "root_cause": "Identity governance job excluded accounts without manager attributes.",
+    "resolution": "Updated campaign scope and assigned orphaned accounts to business owners."
+  },
+  {
+    "issue_name": "DNS Record Missing for New App",
+    "category": "Network",
+    "subcategory": "DNS",
+    "symptoms": "Users cannot reach the new fraud analytics application by hostname.",
+    "root_cause": "Internal DNS CNAME record was not created during deployment.",
+    "resolution": "Created the DNS record and validated resolution from branch and headquarters networks."
+  },
+  {
+    "issue_name": "Email Attachment Stripped",
+    "category": "Email",
+    "subcategory": "Attachment Filtering",
+    "symptoms": "Operations team receives vendor emails without attached settlement reports.",
+    "root_cause": "Attachment filter blocked encrypted ZIP files by policy.",
+    "resolution": "Set up secure file transfer with the vendor and advised against encrypted ZIP email delivery."
+  },
+  {
+    "issue_name": "Thin Client Keyboard Failure",
+    "category": "Hardware",
+    "subcategory": "Branch Device",
+    "symptoms": "Teller thin client does not recognize keyboard input after login screen.",
+    "root_cause": "Damaged USB port on the thin client.",
+    "resolution": "Moved the keyboard to a working port and scheduled thin client replacement."
+  },
+  {
+    "issue_name": "PDF Viewer Freezes",
+    "category": "Software",
+    "subcategory": "Document Tools",
+    "symptoms": "Underwriters report PDF viewer freezes on large mortgage document packages.",
+    "root_cause": "Outdated PDF viewer plugin had a memory leak with large files.",
+    "resolution": "Updated the PDF viewer package and disabled the legacy plugin."
+  },
+  {
+    "issue_name": "High Risk OAuth Consent",
+    "category": "Security",
+    "subcategory": "Cloud Security",
+    "symptoms": "CASB flags user consent to an unverified third-party app requesting mailbox access.",
+    "root_cause": "User approved a malicious OAuth application from a phishing page.",
+    "resolution": "Revoked app consent, removed tokens, and blocked the application tenant-wide."
+  },
+  {
+    "issue_name": "VPN Profile Missing After Reimage",
+    "category": "VPN",
+    "subcategory": "Endpoint Configuration",
+    "symptoms": "Reimaged laptop does not show the corporate VPN profile.",
+    "root_cause": "Device was placed in the wrong endpoint management deployment group.",
+    "resolution": "Moved the device to the correct group and synced VPN profile policy."
+  },
+  {
+    "issue_name": "Missing Entitlement for Audit Tool",
+    "category": "Access Management",
+    "subcategory": "Entitlement Provisioning",
+    "symptoms": "Internal auditor cannot access the evidence collection module.",
+    "root_cause": "Provisioning connector failed to assign the audit module entitlement.",
+    "resolution": "Reprocessed the provisioning task and confirmed entitlement in the application."
+  },
+  {
+    "issue_name": "Branch Router CPU High",
+    "category": "Network",
+    "subcategory": "Routing",
+    "symptoms": "Branch reports slow teller transactions and high router CPU utilization.",
+    "root_cause": "Routing loop introduced by an incorrect static route.",
+    "resolution": "Removed the bad static route and verified routing table stability."
+  },
+  {
+    "issue_name": "Distribution List Not Updating",
+    "category": "Email",
+    "subcategory": "Groups",
+    "symptoms": "New compliance staff do not receive regulatory alert emails.",
+    "root_cause": "Dynamic distribution list filter excluded users with updated department naming.",
+    "resolution": "Updated the recipient filter and validated membership preview."
+  },
+  {
+    "issue_name": "Card Printer Ribbon Error",
+    "category": "Hardware",
+    "subcategory": "Card Issuance",
+    "symptoms": "Branch cannot print debit cards due to ribbon error.",
+    "root_cause": "Incorrect ribbon type installed in the card printer.",
+    "resolution": "Installed the approved ribbon type and recalibrated the printer."
+  },
+  {
+    "issue_name": "Treasury App Slow Reports",
+    "category": "Software",
+    "subcategory": "Reporting",
+    "symptoms": "Treasury users report overnight liquidity reports take over 20 minutes to load.",
+    "root_cause": "Database statistics were stale after bulk data import.",
+    "resolution": "Updated database statistics and scheduled recurring maintenance."
+  },
+  {
+    "issue_name": "Blocked Command and Control Traffic",
+    "category": "Security",
+    "subcategory": "Network Security",
+    "symptoms": "Firewall logs show repeated outbound connections to a known malicious domain.",
+    "root_cause": "Compromised workstation attempted beaconing after a drive-by download.",
+    "resolution": "Isolated the workstation, reimaged the device, and blocked indicators across security tools."
+  },
+  {
+    "issue_name": "VPN Certificate Expired",
+    "category": "VPN",
+    "subcategory": "Certificate Authentication",
+    "symptoms": "All certificate-based VPN users fail authentication after midnight.",
+    "root_cause": "VPN client authentication certificate expired.",
+    "resolution": "Renewed the certificate, updated the gateway trust chain, and pushed new client certificates."
+  },
+  {
+    "issue_name": "Manager Approval Not Triggered",
+    "category": "Access Management",
+    "subcategory": "Workflow Automation",
+    "symptoms": "Access requests for finance apps skip manager approval and fail policy checks.",
+    "root_cause": "Workflow condition used an outdated finance department code.",
+    "resolution": "Updated workflow logic and replayed affected requests."
+  },
+  {
+    "issue_name": "Firewall NAT Misconfiguration",
+    "category": "Network",
+    "subcategory": "Firewall",
+    "symptoms": "External vendor cannot connect to the approved statement processing endpoint.",
+    "root_cause": "NAT rule pointed to the retired server IP after migration.",
+    "resolution": "Corrected the NAT target and verified vendor connectivity."
+  },
+  {
+    "issue_name": "Email Signature Not Applying",
+    "category": "Email",
+    "subcategory": "Client Policy",
+    "symptoms": "Customer-facing emails sent by wealth advisors lack the mandatory disclaimer.",
+    "root_cause": "Signature management policy did not include the new advisor group.",
+    "resolution": "Added the group to the signature policy and forced a client policy refresh."
+  },
+  {
+    "issue_name": "Biometric Device Offline",
+    "category": "Hardware",
+    "subcategory": "Physical Access Device",
+    "symptoms": "Secure operations room biometric reader shows offline in the access console.",
+    "root_cause": "PoE switch port delivering power to the reader failed.",
+    "resolution": "Moved the reader to a healthy PoE port and replaced the faulty switch module."
+  },
+  {
+    "issue_name": "Java Runtime Conflict",
+    "category": "Software",
+    "subcategory": "Legacy Application",
+    "symptoms": "Legacy check imaging application fails after Java update.",
+    "root_cause": "Application requires a specific Java runtime version not pinned on the workstation.",
+    "resolution": "Installed the supported runtime and configured the application-specific Java path."
+  },
+  {
+    "issue_name": "Data Exfiltration DLP Alert",
+    "category": "Security",
+    "subcategory": "DLP",
+    "symptoms": "DLP alerts on attempted upload of customer account data to personal cloud storage.",
+    "root_cause": "Employee attempted to move work files to an unapproved storage service.",
+    "resolution": "Blocked the upload, notified compliance, and reviewed user activity with management."
+  },
+  {
+    "issue_name": "VPN Pool Exhausted",
+    "category": "VPN",
+    "subcategory": "IP Addressing",
+    "symptoms": "Users receive no available address errors during morning remote login peak.",
+    "root_cause": "VPN address pool was too small after remote workforce expansion.",
+    "resolution": "Expanded the VPN IP pool and monitored concurrent usage."
+  },
+  {
+    "issue_name": "Service Account Password Expired",
+    "category": "Access Management",
+    "subcategory": "Service Accounts",
+    "symptoms": "Batch reconciliation job fails authentication overnight.",
+    "root_cause": "Service account password expired due to missing non-expiring policy exception.",
+    "resolution": "Rotated the password, updated the credential vault, and applied the approved service account policy."
+  },
+  {
+    "issue_name": "Proxy Blocking Regulatory Site",
+    "category": "Network",
+    "subcategory": "Web Proxy",
+    "symptoms": "Compliance analysts cannot access a government regulatory filing portal.",
+    "root_cause": "Site was miscategorized as newly registered and blocked by proxy policy.",
+    "resolution": "Recategorized the domain and added a compliance exception."
+  },
+  {
+    "issue_name": "Quarantined Executive Email",
+    "category": "Email",
+    "subcategory": "Email Security Gateway",
+    "symptoms": "Executive reports an expected board packet email never arrived.",
+    "root_cause": "Email was quarantined due to an oversized encrypted attachment.",
+    "resolution": "Released the email after security review and moved the sender to a secure file exchange process."
+  },
+  {
+    "issue_name": "Monitor Flickering",
+    "category": "Hardware",
+    "subcategory": "Display",
+    "symptoms": "Back-office employee reports intermittent flickering on external display.",
+    "root_cause": "Faulty DisplayPort cable caused signal instability.",
+    "resolution": "Replaced the cable and verified stable display output."
+  },
+  {
+    "issue_name": "Expense System Submission Error",
+    "category": "Software",
+    "subcategory": "Finance Application",
+    "symptoms": "Employees cannot submit expense reports with corporate card transactions.",
+    "root_cause": "Integration API token between the card processor and expense system expired.",
+    "resolution": "Renewed the API token and replayed failed transaction imports."
+  },
+  {
+    "issue_name": "Unpatched Server Alert",
+    "category": "Security",
+    "subcategory": "Vulnerability Management",
+    "symptoms": "Vulnerability scanner reports critical patch missing on internal file server.",
+    "root_cause": "Server was excluded from the patch window due to an incorrect maintenance tag.",
+    "resolution": "Corrected the tag, installed the patch, and rescanned the server."
+  },
+  {
+    "issue_name": "VPN Hairpin Latency",
+    "category": "VPN",
+    "subcategory": "Performance",
+    "symptoms": "Remote users experience slow access to cloud-hosted collaboration tools.",
+    "root_cause": "Traffic was hairpinned through the data center VPN instead of local internet breakout.",
+    "resolution": "Updated split tunnel policy for approved SaaS destinations."
+  },
+  {
+    "issue_name": "Duplicate User Identity",
+    "category": "Access Management",
+    "subcategory": "Identity Lifecycle",
+    "symptoms": "New employee has two identities and inconsistent application access.",
+    "root_cause": "HR feed created a duplicate record due to mismatched legal name and preferred name.",
+    "resolution": "Merged identities and reconciled group memberships."
+  },
+  {
+    "issue_name": "WAN Failover Not Triggering",
+    "category": "Network",
+    "subcategory": "High Availability",
+    "symptoms": "Branch loses connectivity when the primary ISP link fails.",
+    "root_cause": "Health check monitored a gateway IP that remained reachable despite upstream failure.",
+    "resolution": "Updated the health check target to external monitored endpoints."
+  },
+  {
+    "issue_name": "Teams Meeting Invites Delayed",
+    "category": "Email",
+    "subcategory": "Calendar Delivery",
+    "symptoms": "Meeting invites arrive hours late for several operations users.",
+    "root_cause": "Mailbox transport rule caused calendar messages to route through extra moderation.",
+    "resolution": "Adjusted the transport rule exception for calendar message classes."
+  },
+  {
+    "issue_name": "Cash Recycler Connection Lost",
+    "category": "Hardware",
+    "subcategory": "Branch Banking Device",
+    "symptoms": "Teller application cannot communicate with cash recycler.",
+    "root_cause": "Loose serial-to-USB adapter after desk relocation.",
+    "resolution": "Reseated the adapter, secured cabling, and restarted teller middleware."
+  },
+  {
+    "issue_name": "Antivirus Blocks Banking Tool",
+    "category": "Software",
+    "subcategory": "Endpoint Compatibility",
+    "symptoms": "Approved reconciliation utility is removed during launch.",
+    "root_cause": "Endpoint protection classified an unsigned executable as suspicious.",
+    "resolution": "Submitted vendor hash for review and created an approved allowlist entry."
+  },
+  {
+    "issue_name": "Impossible Travel Alert",
+    "category": "Security",
+    "subcategory": "Identity Monitoring",
+    "symptoms": "User account logs in from two countries within one hour.",
+    "root_cause": "Credential compromise with attacker using a foreign proxy.",
+    "resolution": "Disabled the account, reset the password, revoked tokens, and reviewed mailbox forwarding rules."
+  },
+  {
+    "issue_name": "VPN Disconnects on Sleep",
+    "category": "VPN",
+    "subcategory": "Client Stability",
+    "symptoms": "Laptop disconnects from VPN whenever the screen locks during remote work.",
+    "root_cause": "Power management setting disabled the network adapter during sleep.",
+    "resolution": "Updated endpoint power policy to keep the adapter available for VPN sessions."
+  },
+  {
+    "issue_name": "Access Recertification Escalation",
+    "category": "Access Management",
+    "subcategory": "Governance",
+    "symptoms": "Several high-risk application entitlements remain uncertified past deadline.",
+    "root_cause": "Business owner was on leave and no delegate was configured.",
+    "resolution": "Assigned a delegate approver and completed recertification."
+  },
+  {
+    "issue_name": "Load Balancer Pool Member Down",
+    "category": "Network",
+    "subcategory": "Load Balancing",
+    "symptoms": "Internal banking API intermittently returns 503 errors.",
+    "root_cause": "One application server failed health checks after a service crash.",
+    "resolution": "Removed the server from the pool, restarted the service, and reintroduced it after health validation."
+  },
+  {
+    "issue_name": "Auto-Reply Misconfiguration",
+    "category": "Email",
+    "subcategory": "Mailbox Rules",
+    "symptoms": "Customer complaints mailbox sends outdated holiday auto-replies.",
+    "root_cause": "Old mailbox rule remained enabled after the holiday coverage period.",
+    "resolution": "Disabled the stale rule and reviewed shared mailbox rules."
+  },
+  {
+    "issue_name": "Laptop Fan Running Constantly",
+    "category": "Hardware",
+    "subcategory": "Laptop",
+    "symptoms": "User reports laptop overheating and fan running at maximum speed.",
+    "root_cause": "Dust buildup and outdated BIOS thermal management firmware.",
+    "resolution": "Cleaned vents, updated BIOS, and confirmed normal temperature readings."
+  },
+  {
+    "issue_name": "KYC Application Error",
+    "category": "Software",
+    "subcategory": "Compliance Application",
+    "symptoms": "KYC analysts cannot submit customer due diligence cases.",
+    "root_cause": "Mandatory field validation changed but the UI cache served old form metadata.",
+    "resolution": "Cleared application cache and deployed corrected metadata refresh."
+  },
+  {
+    "issue_name": "Unauthorized Mail Forwarding",
+    "category": "Security",
+    "subcategory": "Mailbox Security",
+    "symptoms": "Security alert detects an external forwarding rule on an employee mailbox.",
+    "root_cause": "Mailbox was compromised through credential phishing.",
+    "resolution": "Removed the forwarding rule, reset credentials, revoked sessions, and reviewed sent mail."
+  },
+  {
+    "issue_name": "VPN Device Posture Failed",
+    "category": "VPN",
+    "subcategory": "Device Compliance",
+    "symptoms": "User cannot connect to VPN because device posture check fails.",
+    "root_cause": "Endpoint protection definitions were outdated beyond the compliance threshold.",
+    "resolution": "Updated definitions and re-ran posture validation successfully."
+  },
+  {
+    "issue_name": "Shared Drive Access Removed",
+    "category": "Access Management",
+    "subcategory": "Group Policy",
+    "symptoms": "Finance user loses access to the month-end close shared folder.",
+    "root_cause": "Automated cleanup removed a nested group due to stale ownership metadata.",
+    "resolution": "Restored group membership and updated ownership metadata."
+  },
+  {
+    "issue_name": "BGP Neighbor Flapping",
+    "category": "Network",
+    "subcategory": "Routing",
+    "symptoms": "Data center internet connectivity experiences brief outages.",
+    "root_cause": "BGP session instability caused by carrier maintenance on the primary circuit.",
+    "resolution": "Shifted preference to the secondary circuit and coordinated a maintenance window with the carrier."
+  },
+  {
+    "issue_name": "Encrypted Email Plugin Missing",
+    "category": "Email",
+    "subcategory": "Encryption",
+    "symptoms": "Legal team cannot send encrypted messages to external counsel.",
+    "root_cause": "Email encryption add-in was not deployed to newly provisioned laptops.",
+    "resolution": "Assigned the add-in deployment policy and confirmed the encrypted send workflow."
+  },
+  {
+    "issue_name": "Receipt Printer Offline",
+    "category": "Hardware",
+    "subcategory": "Branch Peripheral",
+    "symptoms": "Teller receipt printer shows offline in the banking workstation.",
+    "root_cause": "Printer IP changed after DHCP lease renewal.",
+    "resolution": "Reserved the printer IP and updated workstation printer mapping."
+  },
+  {
+    "issue_name": "Robotic Process Automation Bot Failed",
+    "category": "Software",
+    "subcategory": "Automation",
+    "symptoms": "Daily account reconciliation bot stops at the login screen.",
+    "root_cause": "Application login page changed after release and broke bot selector mapping.",
+    "resolution": "Updated bot selectors and added monitoring for login page changes."
+  },
+  {
+    "issue_name": "Critical Vulnerability Exception Expired",
+    "category": "Security",
+    "subcategory": "Risk Management",
+    "symptoms": "Vulnerability dashboard flags an expired exception for a legacy treasury server.",
+    "root_cause": "Risk exception expired without compensating control review.",
+    "resolution": "Renewed the exception after risk approval and confirmed network isolation controls."
+  },
+  {
+    "issue_name": "VPN Gateway Capacity Alert",
+    "category": "VPN",
+    "subcategory": "Infrastructure",
+    "symptoms": "VPN appliance CPU remains above 90 percent during the peak login window.",
+    "root_cause": "Increased concurrent sessions exceeded sizing assumptions.",
+    "resolution": "Balanced users across an additional gateway and scheduled a capacity upgrade."
+  },
+  {
+    "issue_name": "Application Access After Transfer",
+    "category": "Access Management",
+    "subcategory": "Mover Process",
+    "symptoms": "Employee transferred from retail banking to risk but still has teller system access.",
+    "root_cause": "Mover workflow added new access but failed to remove the old role.",
+    "resolution": "Removed retail banking roles and corrected the mover workflow policy."
+  },
+  {
+    "issue_name": "NTP Drift on Authentication Servers",
+    "category": "Network",
+    "subcategory": "Time Synchronization",
+    "symptoms": "Users intermittently fail Kerberos authentication.",
+    "root_cause": "Domain controllers drifted from the approved NTP source after a firewall change.",
+    "resolution": "Restored NTP access and resynchronized domain controllers."
+  },
+  {
+    "issue_name": "Mass Email Throttling",
+    "category": "Email",
+    "subcategory": "Outbound Sending",
+    "symptoms": "Marketing operations cannot send an approved customer notification batch.",
+    "root_cause": "Outbound throttling policy treated the batch as suspicious volume.",
+    "resolution": "Used the approved bulk notification platform and adjusted internal relay limits."
+  },
+  {
+    "issue_name": "Headset Audio Distortion",
+    "category": "Hardware",
+    "subcategory": "Contact Center Equipment",
+    "symptoms": "Contact center agents hear distorted audio during customer calls.",
+    "root_cause": "Faulty headset batch with damaged inline controllers.",
+    "resolution": "Replaced affected headsets and returned the batch to the vendor."
+  },
+  {
+    "issue_name": "Policy Management App Permission Error",
+    "category": "Software",
+    "subcategory": "Risk Application",
+    "symptoms": "Risk managers receive permission denied when updating control attestations.",
+    "root_cause": "Application role mapping did not sync after organizational unit rename.",
+    "resolution": "Resynced role mappings and validated control owner permissions."
+  },
+  {
+    "issue_name": "Ransomware Behavior Blocked",
+    "category": "Security",
+    "subcategory": "Endpoint Detection",
+    "symptoms": "EDR blocks a process attempting rapid encryption of files on a shared drive.",
+    "root_cause": "User executed a malicious script from a downloaded archive.",
+    "resolution": "Isolated the endpoint, restored affected files from snapshots, and blocked script indicators."
+  },
+  {
+    "issue_name": "VPN Login Works But Apps Fail",
+    "category": "VPN",
+    "subcategory": "Authorization",
+    "symptoms": "User connects to VPN but cannot reach the internal credit approval application.",
+    "root_cause": "VPN authorization group missing application ACL assignment.",
+    "resolution": "Added the approved group to the VPN ACL and confirmed application access."
+  },
+  {
+    "issue_name": "Privileged Access Checkout Failure",
+    "category": "Access Management",
+    "subcategory": "PAM",
+    "symptoms": "Database administrator cannot check out privileged credentials from the PAM vault.",
+    "root_cause": "Credential rotation job failed and left the account password out of sync.",
+    "resolution": "Manually reconciled the credential and restarted the rotation job."
+  },
+  {
+    "issue_name": "Packet Loss to Payment Gateway",
+    "category": "Network",
+    "subcategory": "External Connectivity",
+    "symptoms": "Payment transactions intermittently fail during authorization.",
+    "root_cause": "ISP peering issue causing packet loss to the payment processor endpoint.",
+    "resolution": "Rerouted traffic through an alternate ISP and escalated to the provider."
+  },
+  {
+    "issue_name": "Mailbox Litigation Hold Missing",
+    "category": "Email",
+    "subcategory": "Compliance",
+    "symptoms": "Legal discovery report shows custodian mailbox not on litigation hold.",
+    "root_cause": "Legal hold request was submitted with an incorrect employee ID.",
+    "resolution": "Applied litigation hold to the correct mailbox and updated discovery case records."
+  }
+]
