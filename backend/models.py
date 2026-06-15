@@ -17,6 +17,9 @@ class IncidentMatch(BaseModel):
     issue_name: str
     category: str
     subcategory: str
+    priority: str
+    department: str
+    status: str
     score: float
 
 

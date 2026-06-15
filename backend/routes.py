@@ -57,6 +57,9 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
             issue_name=str(match["issue_name"]),
             category=str(match["category"]),
             subcategory=str(match["subcategory"]),
+            priority=str(match["priority"]),
+            department=str(match["department"]),
+            status=str(match["status"]),
             score=float(match["score"]),
         )
         for match in search_results
