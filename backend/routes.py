@@ -3,9 +3,9 @@
 from fastapi import APIRouter, HTTPException, status
 from starlette.concurrency import run_in_threadpool
 
-from rag.search import search_incidents
+from backend.agent_service import process_query
 
-from .models import AgentRequest, AgentResponse, IncidentMatch
+from .models import AgentRequest, AgentResponse, RetrievedIncident
 
 
 router = APIRouter()
@@ -34,7 +34,7 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
     """Search historical incidents and return the closest matches."""
 
     try:
-        search_results = await run_in_threadpool(search_incidents, payload.query, top_k=5)
+        result = await run_in_threadpool(process_query, payload.query)
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -48,26 +48,33 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
     except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Unexpected error while searching incidents.",
+            detail="Unexpected error while processing triage request.",
         ) from exc
 
-    matches = [
-        IncidentMatch(
-            ticket_id=str(match["ticket_id"]),
-            issue_name=str(match["issue_name"]),
-            category=str(match["category"]),
-            subcategory=str(match["subcategory"]),
-            priority=str(match["priority"]),
-            department=str(match["department"]),
-            status=str(match["status"]),
-            score=float(match["score"]),
+    retrieved_incidents = [
+        RetrievedIncident(
+            ticket_id=str(incident["ticket_id"]),
+            issue_name=str(incident["issue_name"]),
+            category=str(incident["category"]),
+            subcategory=str(incident["subcategory"]),
+            priority=str(incident["priority"]),
+            department=str(incident["department"]),
+            status=str(incident["status"]),
+            score=float(incident["score"]),
+            symptoms=str(incident["symptoms"]),
+            root_cause=str(incident["root_cause"]),
+            resolution=str(incident["resolution"]),
         )
-        for match in search_results
+        for incident in result["retrieved_incidents"]
     ]
 
     return AgentResponse(
         status="success",
         query=payload.query,
         session_id=payload.session_id,
-        matches=matches,
+        predicted_category=str(result["predicted_category"]),
+        predicted_subcategory=str(result["predicted_subcategory"]),
+        confidence_score=float(result["confidence_score"]),
+        recommended_resolution=str(result["recommended_resolution"]),
+        retrieved_incidents=retrieved_incidents,
     )

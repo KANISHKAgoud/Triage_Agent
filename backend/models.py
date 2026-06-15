@@ -10,8 +10,8 @@ class AgentRequest(BaseModel):
     session_id: str = Field(..., min_length=1, description="Client session identifier.")
 
 
-class IncidentMatch(BaseModel):
-    """A single incident match returned by semantic search."""
+class RetrievedIncident(BaseModel):
+    """A historical incident retrieved for the triage response."""
 
     ticket_id: str
     issue_name: str
@@ -21,6 +21,9 @@ class IncidentMatch(BaseModel):
     department: str
     status: str
     score: float
+    symptoms: str
+    root_cause: str
+    resolution: str
 
 
 class AgentResponse(BaseModel):
@@ -29,4 +32,8 @@ class AgentResponse(BaseModel):
     status: str
     query: str
     session_id: str
-    matches: list[IncidentMatch]
+    predicted_category: str
+    predicted_subcategory: str
+    confidence_score: float
+    recommended_resolution: str
+    retrieved_incidents: list[RetrievedIncident]

@@ -7,6 +7,31 @@ from typing import Any
 from .ingest import COLLECTION_NAME, get_collection
 
 
+DOCUMENT_FIELD_LABELS = {
+    "symptoms": "Symptoms",
+    "root_cause": "Root Cause",
+    "resolution": "Resolution",
+}
+
+
+def _extract_document_fields(document: str) -> dict[str, str]:
+    """Extract incident detail fields from Chroma's stored document text."""
+
+    extracted_fields = {field: "" for field in DOCUMENT_FIELD_LABELS}
+
+    for line in document.splitlines():
+        if ": " not in line:
+            continue
+
+        label, value = line.split(": ", 1)
+        for field, expected_label in DOCUMENT_FIELD_LABELS.items():
+            if label == expected_label:
+                extracted_fields[field] = value.strip()
+                break
+
+    return extracted_fields
+
+
 def search_incidents(query: str, top_k: int = 5) -> list[dict[str, Any]]:
     """Return the top matching incidents for a user query.
 
@@ -43,6 +68,8 @@ def search_incidents(query: str, top_k: int = 5) -> list[dict[str, Any]]:
 
     matches: list[dict[str, Any]] = []
     for document, metadata, distance in zip(documents, metadatas, distances):
+        document_fields = _extract_document_fields(document)
+
         matches.append(
             {
                 "ticket_id": metadata.get("ticket_id"),
@@ -53,6 +80,9 @@ def search_incidents(query: str, top_k: int = 5) -> list[dict[str, Any]]:
                 "department": metadata.get("department"),
                 "status": metadata.get("status"),
                 "score": 1 / (1 + distance),
+                "symptoms": document_fields["symptoms"],
+                "root_cause": document_fields["root_cause"],
+                "resolution": document_fields["resolution"],
                 "matched_text": document,
             }
         )
