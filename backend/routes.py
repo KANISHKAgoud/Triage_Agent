@@ -4,6 +4,10 @@ from fastapi import APIRouter, HTTPException, status
 from starlette.concurrency import run_in_threadpool
 
 from backend.agent_service import process_query
+from backend.freescout_service import (
+    add_ticket_note,
+    update_ticket_fields,
+)
 
 from .models import (
     AgentRequest,
@@ -103,6 +107,15 @@ async def run_freescout_webhook(
 
     try:
         result = await run_in_threadpool(process_query, search_query)
+        update_ticket_fields(
+            ticket_id=payload.ticket_id,
+            category=result["predicted_category"],
+            subcategory=result["predicted_subcategory"],
+        )
+        add_ticket_note(
+            ticket_id=payload.ticket_id,
+            note=result["recommended_resolution"],
+        )
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
