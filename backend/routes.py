@@ -5,6 +5,9 @@ from backend.langgraph_service import process_query_langgraph
 from fastapi import APIRouter, HTTPException, status
 from starlette.concurrency import run_in_threadpool
 from backend.postgres_storage import get_triage_history_pg
+from backend.outlook_graph_service import get_emails
+from backend.outlook_service import fetch_new_emails
+from backend.email_processor import process_email
 
 from backend.agent_service import process_query
 from backend.freescout_service import (
@@ -169,6 +172,43 @@ async def run_freescout_webhook(
         recommended_resolution=str(result["recommended_resolution"]),
         retrieved_incidents=retrieved_incidents,
     )
+
+@router.get("/outlook/test")
+async def outlook_test():
+
+    emails = fetch_new_emails()
+
+    return {
+        "count": len(emails),
+        "emails": emails,
+    }
+
+@router.get("/outlook/process")
+async def outlook_process():
+
+    emails = fetch_new_emails()
+
+    results = []
+
+    for email in emails:
+        results.append(
+            process_email(email)
+        )
+
+    return {
+        "processed": len(results),
+        "results": results,
+    }
+
+@router.get("/outlook/live")
+async def outlook_live():
+
+    emails = get_emails()
+
+    return {
+        "count": len(emails),
+        "emails": emails,
+    }
 
 
 @router.get("/history")
