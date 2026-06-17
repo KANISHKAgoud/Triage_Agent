@@ -1,5 +1,6 @@
 """API route definitions for the Triage Agent service."""
 
+from backend.langgraph_service import process_query_langgraph
 from fastapi import APIRouter, HTTPException, status
 from starlette.concurrency import run_in_threadpool
 
@@ -46,7 +47,10 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
     search_query = payload.search_query
 
     try:
-        result = await run_in_threadpool(process_query, search_query)
+        result = await run_in_threadpool(
+    process_query_langgraph,
+    search_query,
+)
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -106,7 +110,10 @@ async def run_freescout_webhook(
     search_query = payload.search_query
 
     try:
-        result = await run_in_threadpool(process_query, search_query)
+        result = await run_in_threadpool(
+    process_query_langgraph,
+    search_query,
+)
         update_ticket_fields(
             ticket_id=payload.ticket_id,
             category=result["predicted_category"],
