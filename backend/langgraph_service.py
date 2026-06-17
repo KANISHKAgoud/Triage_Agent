@@ -1,5 +1,5 @@
 from typing import Any, TypedDict
-
+from backend.storage_service import save_triage_result
 from langgraph.graph import END, StateGraph
 
 from backend.llm_service import generate_triage_response
@@ -58,6 +58,17 @@ def resolution_node(state: AgentState):
 
 
 def response_node(state: AgentState):
+
+    save_triage_result(
+        ticket_id="AGENT",
+        query=state["query"],
+        category=state["predicted_category"],
+        subcategory=state["predicted_subcategory"],
+        resolution=state["recommended_resolution"],
+    )
+
+    print("Saved triage result to database")
+
     return state
 
 

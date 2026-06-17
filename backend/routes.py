@@ -1,5 +1,6 @@
 """API route definitions for the Triage Agent service."""
 
+from backend.storage_service import get_triage_history
 from backend.langgraph_service import process_query_langgraph
 from fastapi import APIRouter, HTTPException, status
 from starlette.concurrency import run_in_threadpool
@@ -102,6 +103,17 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
     status_code=status.HTTP_200_OK,
     summary="Process a FreeScout ticket webhook",
 )
+
+@router.get("/history")
+async def history():
+
+    rows = get_triage_history()
+
+    return {
+        "count": len(rows),
+        "results": rows,
+    }
+
 async def run_freescout_webhook(
     payload: FreeScoutWebhookRequest,
 ) -> FreeScoutWebhookResponse:
