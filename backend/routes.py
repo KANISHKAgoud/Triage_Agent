@@ -4,6 +4,7 @@ from backend.storage_service import get_triage_history
 from backend.langgraph_service import process_query_langgraph
 from fastapi import APIRouter, HTTPException, status
 from starlette.concurrency import run_in_threadpool
+from backend.postgres_storage import get_triage_history_pg
 
 from backend.agent_service import process_query
 from backend.freescout_service import (
@@ -104,16 +105,6 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
     summary="Process a FreeScout ticket webhook",
 )
 
-@router.get("/history")
-async def history():
-
-    rows = get_triage_history()
-
-    return {
-        "count": len(rows),
-        "results": rows,
-    }
-
 async def run_freescout_webhook(
     payload: FreeScoutWebhookRequest,
 ) -> FreeScoutWebhookResponse:
@@ -123,8 +114,9 @@ async def run_freescout_webhook(
 
     try:
         result = await run_in_threadpool(
-    process_query_langgraph,
-    search_query,
+        process_query_langgraph,
+        search_query,
+        payload.ticket_id,
 )
         update_ticket_fields(
             ticket_id=payload.ticket_id,
@@ -175,3 +167,24 @@ async def run_freescout_webhook(
         recommended_resolution=str(result["recommended_resolution"]),
         retrieved_incidents=retrieved_incidents,
     )
+
+
+@router.get("/history")
+async def history():
+
+    rows = get_triage_history()
+
+    return {
+        "count": len(rows),
+        "results": rows,
+    }
+
+@router.get("/postgres-history")
+async def postgres_history():
+
+    rows = get_triage_history_pg()
+
+    return {
+        "count": len(rows),
+        "results": rows,
+    }

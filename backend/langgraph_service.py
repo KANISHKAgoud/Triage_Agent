@@ -2,12 +2,16 @@ from typing import Any, TypedDict
 from backend.storage_service import save_triage_result
 from langgraph.graph import END, StateGraph
 
+from backend.postgres_storage import save_triage_result_pg
+
 from backend.llm_service import generate_triage_response
 from rag.search import search_incidents
 
 
 class AgentState(TypedDict):
     query: str
+    ticket_id: str
+
     retrieved_incidents: list[dict[str, Any]]
 
     predicted_category: str
@@ -60,7 +64,15 @@ def resolution_node(state: AgentState):
 def response_node(state: AgentState):
 
     save_triage_result(
-        ticket_id="AGENT",
+        ticket_id=state["ticket_id"],
+        query=state["query"],
+        category=state["predicted_category"],
+        subcategory=state["predicted_subcategory"],
+        resolution=state["recommended_resolution"],
+    )
+
+    save_triage_result_pg(
+        ticket_id=state["ticket_id"],
         query=state["query"],
         category=state["predicted_category"],
         subcategory=state["predicted_subcategory"],
@@ -119,10 +131,14 @@ builder.add_edge(
 graph = builder.compile()
 
 
-def process_query_langgraph(query: str):
+def process_query_langgraph(
+    query: str,
+    ticket_id: str = "AGENT",
+    ):
     result = graph.invoke(
         {
-            "query": query
+            "query": query,
+            "ticket_id": ticket_id,
         }
     )
 
