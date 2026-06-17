@@ -144,6 +144,18 @@ def process_query_langgraph(
 
     top_incident = result["retrieved_incidents"][0]
 
+    if float(top_incident.get("score", 0.0)) < 0.60:
+        return {
+            "predicted_category": "Unknown",
+            "predicted_subcategory": "Unknown",
+            "confidence_score": round(
+                float(top_incident.get("score", 0.0)),
+                4,
+            ),
+            "retrieved_incidents": result["retrieved_incidents"],
+            "recommended_resolution": "Manual review required.",
+        }
+
     return {
         "predicted_category":
             result["predicted_category"],
