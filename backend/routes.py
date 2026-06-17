@@ -64,9 +64,11 @@ async def run_agent(payload: AgentRequest) -> AgentResponse:
             detail=str(exc),
         ) from exc
     except Exception as exc:
+        print(exc)
+
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Unexpected error while processing triage request.",
+            detail=str(exc),
         ) from exc
 
     retrieved_incidents = [

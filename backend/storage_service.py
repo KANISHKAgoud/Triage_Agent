@@ -7,6 +7,7 @@ def save_triage_result(
     category,
     subcategory,
     resolution,
+    ticket_status,
 ):
     conn = get_connection()
 
@@ -18,9 +19,10 @@ def save_triage_result(
             query,
             category,
             subcategory,
-            resolution
+            resolution,
+            ticket_status
         )
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?)
         """,
         (
             ticket_id,
@@ -28,6 +30,7 @@ def save_triage_result(
             category,
             subcategory,
             resolution,
+            ticket_status,
         ),
     )
 

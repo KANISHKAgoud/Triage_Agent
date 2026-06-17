@@ -16,6 +16,7 @@ def create_tables():
             category TEXT,
             subcategory TEXT,
             resolution TEXT,
+            ticket_status TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)

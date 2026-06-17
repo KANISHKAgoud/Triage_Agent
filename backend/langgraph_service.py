@@ -69,6 +69,7 @@ def response_node(state: AgentState):
         category=state["predicted_category"],
         subcategory=state["predicted_subcategory"],
         resolution=state["recommended_resolution"],
+        ticket_status="TRIAGED",
     )
 
     save_triage_result_pg(
@@ -77,6 +78,7 @@ def response_node(state: AgentState):
         category=state["predicted_category"],
         subcategory=state["predicted_subcategory"],
         resolution=state["recommended_resolution"],
+        ticket_status="TRIAGED",
     )
 
     print("Saved triage result to database")

@@ -7,6 +7,7 @@ def save_triage_result_pg(
     category,
     subcategory,
     resolution,
+    ticket_status,
 ):
     conn = get_pg_connection()
 
@@ -20,9 +21,10 @@ def save_triage_result_pg(
             query,
             category,
             subcategory,
-            resolution
+            resolution,
+            ticket_status
         )
-        VALUES (%s,%s,%s,%s,%s)
+        VALUES (%s,%s,%s,%s,%s,%s)
         """,
         (
             ticket_id,
@@ -30,6 +32,7 @@ def save_triage_result_pg(
             category,
             subcategory,
             resolution,
+            ticket_status,
         ),
     )
 
@@ -53,6 +56,7 @@ def get_triage_history_pg():
             query,
             category,
             subcategory,
+            ticket_status,
             resolution,
             created_at
         FROM triage_results
