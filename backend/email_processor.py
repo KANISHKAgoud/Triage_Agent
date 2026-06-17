@@ -1,5 +1,5 @@
 from backend.langgraph_service import process_query_langgraph
-
+from backend.outlook_service import mark_email_processed
 
 def process_email(email):
 
@@ -13,6 +13,8 @@ def process_email(email):
         query=query,
         ticket_id=email["id"],
     )
+
+    mark_email_processed(email["id"])
 
     return {
         "email_id": email["id"],
