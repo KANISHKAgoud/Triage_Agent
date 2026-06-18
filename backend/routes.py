@@ -8,7 +8,7 @@ from backend.postgres_storage import get_triage_history_pg
 from backend.outlook_graph_service import get_emails
 from backend.outlook_service import fetch_new_emails
 from backend.email_processor import process_email
-
+from backend.email_service import send_triage_email
 from backend.agent_service import process_query
 from backend.freescout_service import (
     add_ticket_note,
@@ -172,6 +172,22 @@ async def run_freescout_webhook(
         recommended_resolution=str(result["recommended_resolution"]),
         retrieved_incidents=retrieved_incidents,
     )
+
+
+@router.get("/email/test")
+async def email_test():
+
+    send_triage_email(
+        recipient="user@example.com",
+        category="VPN",
+        subcategory="Remote Access",
+        resolution="Reset MFA registration",
+    )
+
+    return {
+        "status": "email simulated"
+    }
+
 
 @router.get("/outlook/test")
 async def outlook_test():
