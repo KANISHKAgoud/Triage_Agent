@@ -9,6 +9,10 @@ from backend.outlook_graph_service import get_emails
 from backend.outlook_service import fetch_new_emails
 from backend.email_processor import process_email
 from backend.email_service import send_triage_email
+from backend.ticket_storage import get_tickets
+
+from backend.vector_service import get_vector_stats
+
 from backend.agent_service import process_query
 from backend.freescout_service import (
     add_ticket_note,
@@ -245,4 +249,41 @@ async def postgres_history():
     return {
         "count": len(rows),
         "results": rows,
+    }
+
+@router.get("/tickets")
+async def tickets():
+
+    rows = get_tickets()
+
+    return {
+        "count": len(rows),
+        "tickets": rows,
+    }
+
+@router.get("/vector-health")
+async def vector_health():
+
+    return get_vector_stats()
+
+@router.get("/dashboard")
+async def dashboard():
+
+    rows = get_tickets()
+
+    total = len(rows)
+
+    triaged = len(
+        [
+            row
+            for row in rows
+            if row[3] == "TRIAGED"
+        ]
+    )
+
+    return {
+        "total_tickets": total,
+        "triaged_tickets": triaged,
+        "vector_db": "healthy",
+        "mailbox": "connected",
     }

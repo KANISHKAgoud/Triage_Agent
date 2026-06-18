@@ -1,3 +1,5 @@
+import os
+
 emails = [
     {
         "id": "MAIL-001",
@@ -14,7 +16,26 @@ emails = [
 ]
 
 
+def fetch_real_outlook_emails():
+
+    tenant_id = os.getenv("AZURE_TENANT_ID")
+
+    if not tenant_id:
+        return []
+
+    print(
+        "Real Outlook integration would run here"
+    )
+
+    return []
+
+
 def fetch_new_emails():
+
+    real_emails = fetch_real_outlook_emails()
+
+    if real_emails:
+        return real_emails
 
     return [
         email
