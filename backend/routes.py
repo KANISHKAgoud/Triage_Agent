@@ -10,7 +10,7 @@ from backend.outlook_service import fetch_new_emails
 from backend.email_processor import process_email
 from backend.email_service import send_triage_email
 from backend.ticket_storage import get_tickets
-
+from backend.servicenow_storage import get_incidents
 from backend.vector_service import get_vector_stats
 
 from backend.agent_service import process_query
@@ -286,4 +286,15 @@ async def dashboard():
         "triaged_tickets": triaged,
         "vector_db": "healthy",
         "mailbox": "connected",
+    }
+
+
+@router.get("/servicenow/incidents")
+async def servicenow_incidents():
+
+    rows = get_incidents()
+
+    return {
+        "count": len(rows),
+        "incidents": rows,
     }

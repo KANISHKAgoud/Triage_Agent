@@ -4,7 +4,6 @@ from backend.email_service import send_triage_email
 from backend.ticket_storage import create_ticket
 from backend.ticket_service import update_ticket_status
 from backend.ticket_status import PROCESSING
-
 from backend.servicenow_service import create_incident
 
 def process_email(email):
@@ -42,7 +41,7 @@ def process_email(email):
     )
 
     send_triage_email(
-        recipient="user@example.com",
+        recipient="oakcompasshub@outlook.com",
         category=result["predicted_category"],
         subcategory=result["predicted_subcategory"],
         resolution=result["recommended_resolution"],

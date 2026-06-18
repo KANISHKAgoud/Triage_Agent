@@ -1,9 +1,19 @@
+from backend.servicenow_storage import save_incident
+
+
 def create_incident(
     ticket_id,
     category,
     subcategory,
     resolution,
 ):
+
+    save_incident(
+        ticket_id,
+        category,
+        subcategory,
+        resolution,
+    )
 
     print(
         f"""
@@ -15,4 +25,3 @@ Subcategory: {subcategory}
 Resolution: {resolution}
 """
     )
-    
