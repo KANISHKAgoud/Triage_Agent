@@ -3,5 +3,16 @@ venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+
 chroma_db/
 rag/chroma_db/
+
+triage.db
+
+*.db
+
+.vscode/
+
+.idea/
+
+*.log
