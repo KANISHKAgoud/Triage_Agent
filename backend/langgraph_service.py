@@ -7,6 +7,11 @@ from backend.postgres_storage import save_triage_result_pg
 from backend.llm_service import generate_triage_response
 from rag.search import search_incidents
 
+from backend.ticket_status import (
+    PROCESSING,
+    TRIAGED,
+)
+
 
 class AgentState(TypedDict):
     query: str
@@ -69,8 +74,8 @@ def response_node(state: AgentState):
         category=state["predicted_category"],
         subcategory=state["predicted_subcategory"],
         resolution=state["recommended_resolution"],
-        ticket_status="TRIAGED",
-    )
+        ticket_status=TRIAGED,
+    ),
 
     save_triage_result_pg(
         ticket_id=state["ticket_id"],
@@ -78,7 +83,7 @@ def response_node(state: AgentState):
         category=state["predicted_category"],
         subcategory=state["predicted_subcategory"],
         resolution=state["recommended_resolution"],
-        ticket_status="TRIAGED",
+        ticket_status=TRIAGED,
     )
 
     print("Saved triage result to database")
