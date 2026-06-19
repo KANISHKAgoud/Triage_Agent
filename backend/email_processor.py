@@ -5,6 +5,7 @@ from backend.ticket_storage import create_ticket
 from backend.ticket_service import update_ticket_status
 from backend.ticket_status import PROCESSING
 from backend.servicenow_service import create_incident
+from backend.jira_service import create_jira_ticket
 
 def process_email(email):
 
@@ -30,6 +31,17 @@ def process_email(email):
         subcategory=result["predicted_subcategory"],
         resolution=result["recommended_resolution"],
     )
+
+    print("ServiceNow Incident Saved")
+
+    create_jira_ticket(
+        ticket_id=email["id"],
+        category=result["predicted_category"],
+        subcategory=result["predicted_subcategory"],
+        resolution=result["recommended_resolution"],
+    )
+
+    print("Jira Ticket Created")
 
     create_ticket(
         ticket_id=email["id"],
