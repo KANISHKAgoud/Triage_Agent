@@ -12,11 +12,17 @@ from backend.email_service import send_triage_email
 from backend.ticket_storage import get_tickets
 from backend.servicenow_storage import get_incidents
 from backend.vector_service import get_vector_stats
-from backend.jira_storage import get_jira_issues
+# from backend.jira_storage import get_jira_issues
 from backend.ticket_storage import get_tickets
 from backend.servicenow_storage import get_incidents
 from backend.vector_service import get_vector_stats
-
+from backend.jira_service import add_jira_comment
+from backend.jira_storage import (
+    get_jira_issues,
+    get_jira_issue,
+    get_jira_issue_keys,
+)
+# from backend.jira_storage import get_jira_issue
 from backend.agent_service import process_query
 from backend.freescout_service import (
     add_ticket_note,
@@ -323,3 +329,126 @@ async def jira_issues():
     data = get_jira_issues()
 
     return data
+
+
+@router.get("/jira/issue/{issue_key}")
+async def jira_issue(issue_key: str):
+
+    data = get_jira_issue(issue_key)
+
+    return data
+
+@router.get("/jira/process/{issue_key}")
+async def jira_process(issue_key: str):
+
+    issue = get_jira_issue(issue_key)
+
+    description = ""
+
+    try:
+
+        description = (
+            issue["fields"]
+            ["description"]
+            ["content"][0]
+            ["content"][0]
+            ["text"]
+        )
+
+    except Exception:
+
+        description = issue["fields"]["summary"]
+
+    result = process_query_langgraph(
+        description
+    )
+
+    jira_comment = f"""
+    Category: {result['predicted_category']}
+
+    Subcategory: {result['predicted_subcategory']}
+
+    Resolution:
+    {result['recommended_resolution']}
+    """
+
+    add_jira_comment(
+        issue_key,
+        jira_comment,
+    )
+
+    return {
+        "issue_key": issue_key,
+        "summary": issue["fields"]["summary"],
+        "description": description,
+        "predicted_category":
+            result["predicted_category"],
+        "predicted_subcategory":
+            result["predicted_subcategory"],
+        "resolution":
+            result["recommended_resolution"],
+    }
+
+
+@router.get("/jira/process-all")
+async def jira_process_all():
+
+    issue_keys = get_jira_issue_keys()
+
+    results = []
+
+    for issue_key in issue_keys:
+
+        issue = get_jira_issue(
+            issue_key
+        )
+
+        try:
+
+            description = (
+                issue["fields"]
+                ["description"]
+                ["content"][0]
+                ["content"][0]
+                ["text"]
+            )
+
+        except Exception:
+
+            description = (
+                issue["fields"]
+                ["summary"]
+            )
+
+        result = process_query_langgraph(
+            description
+        )
+
+        jira_comment = f"""
+Category: {result['predicted_category']}
+
+Subcategory: {result['predicted_subcategory']}
+
+Resolution:
+{result['recommended_resolution']}
+"""
+
+        add_jira_comment(
+            issue_key,
+            jira_comment,
+        )
+
+        results.append(
+            {
+                "issue_key": issue_key,
+                "category":
+                    result["predicted_category"],
+                "subcategory":
+                    result["predicted_subcategory"],
+            }
+        )
+
+    return {
+        "processed": len(results),
+        "results": results,
+    }

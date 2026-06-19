@@ -62,3 +62,53 @@ def create_jira_ticket(
     print(response.text)
 
     return response.json()
+
+def add_jira_comment(
+    issue_key,
+    comment_text,
+):
+
+    url = (
+        f"{os.getenv('JIRA_URL')}"
+        f"/rest/api/3/issue/{issue_key}/comment"
+    )
+
+    auth = HTTPBasicAuth(
+        os.getenv("JIRA_EMAIL"),
+        os.getenv("JIRA_API_TOKEN"),
+    )
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
+    payload = {
+        "body": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": comment_text,
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+    response = requests.post(
+        url,
+        json=payload,
+        headers=headers,
+        auth=auth,
+    )
+
+    print(response.status_code)
+    print(response.text)
+
+    return response.json()
