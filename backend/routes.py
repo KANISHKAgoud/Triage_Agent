@@ -12,6 +12,10 @@ from backend.email_service import send_triage_email
 from backend.ticket_storage import get_tickets
 from backend.servicenow_storage import get_incidents
 from backend.vector_service import get_vector_stats
+from backend.jira_storage import get_jira_issues
+from backend.ticket_storage import get_tickets
+from backend.servicenow_storage import get_incidents
+from backend.vector_service import get_vector_stats
 
 from backend.agent_service import process_query
 from backend.freescout_service import (
@@ -269,21 +273,34 @@ async def vector_health():
 @router.get("/dashboard")
 async def dashboard():
 
-    rows = get_tickets()
+    tickets = get_tickets()
 
-    total = len(rows)
+    incidents = get_incidents()
 
-    triaged = len(
+    vector_stats = get_vector_stats()
+
+    total_tickets = len(tickets)
+
+    triaged_tickets = len(
         [
-            row
-            for row in rows
-            if row[3] == "TRIAGED"
+            ticket
+            for ticket in tickets
+            if ticket[3] == "TRIAGED"
         ]
     )
 
+    servicenow_incidents = len(incidents)
+
+    vector_documents = vector_stats.get(
+        "documents",
+        0,
+    )
+
     return {
-        "total_tickets": total,
-        "triaged_tickets": triaged,
+        "total_tickets": total_tickets,
+        "triaged_tickets": triaged_tickets,
+        "servicenow_incidents": servicenow_incidents,
+        "vector_documents": vector_documents,
         "vector_db": "healthy",
         "mailbox": "connected",
     }
@@ -298,3 +315,11 @@ async def servicenow_incidents():
         "count": len(rows),
         "incidents": rows,
     }
+
+
+@router.get("/jira/issues")
+async def jira_issues():
+
+    data = get_jira_issues()
+
+    return data
