@@ -4,7 +4,7 @@ import ErrorState from "../components/ErrorState.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import StatCard from "../components/StatCard.jsx";
-import { getDashboard, getErrorMessage } from "../services/api.js";
+import { getDashboard, getErrorMessage } from "../services/api";
 import { formatNumber } from "../utils/formatters.js";
 
 export default function Dashboard() {

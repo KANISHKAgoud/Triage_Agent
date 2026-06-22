@@ -5,7 +5,7 @@ import ErrorState from "../components/ErrorState.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import StatusBadge from "../components/StatusBadge.jsx";
-import { getErrorMessage, getJiraIssues } from "../services/api.js";
+import { getErrorMessage, getJiraIssues } from "../services/api";
 import { normalizeJiraIssues } from "../utils/normalizers.js";
 
 const columns = [

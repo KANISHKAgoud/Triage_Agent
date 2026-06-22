@@ -462,3 +462,93 @@ async def jira_process_all():
         "processed": len(results),
         "results": results,
     }
+
+
+@router.get("/jira/unprocessed")
+async def jira_unprocessed():
+
+    issue_keys = get_jira_issue_keys()
+
+    results = []
+
+    for issue_key in issue_keys:
+
+        if is_processed(issue_key):
+            continue
+
+        issue = get_jira_issue(issue_key)
+
+        results.append(
+            {
+                "issue_key": issue_key,
+                "summary": issue["fields"]["summary"],
+                "status": issue["fields"]["status"]["name"],
+            }
+        )
+
+    return {
+        "count": len(results),
+        "tickets": results,
+    }
+
+
+@router.post("/jira/process-ticket/{issue_key}")
+async def process_single_ticket(
+    issue_key: str
+):
+
+    if is_processed(issue_key):
+
+        return {
+            "status": "already_processed"
+        }
+
+    issue = get_jira_issue(
+        issue_key
+    )
+
+    try:
+
+        description = (
+            issue["fields"]
+            ["description"]
+            ["content"][0]
+            ["content"][0]
+            ["text"]
+        )
+
+    except Exception:
+
+        description = (
+            issue["fields"]
+            ["summary"]
+        )
+
+    result = process_query_langgraph(
+        description
+    )
+
+    jira_comment = f"""
+Category: {result['predicted_category']}
+
+Subcategory: {result['predicted_subcategory']}
+
+Resolution:
+{result['recommended_resolution']}
+"""
+
+    add_jira_comment(
+        issue_key,
+        jira_comment,
+    )
+
+    mark_processed(
+        issue_key
+    )
+
+    return {
+        "issue_key": issue_key,
+        "category": result["predicted_category"],
+        "subcategory": result["predicted_subcategory"],
+        "resolution": result["recommended_resolution"],
+    }

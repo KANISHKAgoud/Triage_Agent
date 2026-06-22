@@ -4,7 +4,7 @@ import DataTable from "../components/DataTable.jsx";
 import ErrorState from "../components/ErrorState.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import PageHeader from "../components/PageHeader.jsx";
-import { getErrorMessage, runAgent } from "../services/api.js";
+import { getErrorMessage, runAgent } from "../services/api";
 import { formatPercent, safeValue } from "../utils/formatters.js";
 import { normalizeRetrievedIncidents } from "../utils/normalizers.js";
 

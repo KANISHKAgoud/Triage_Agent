@@ -3,7 +3,7 @@ import DataTable from "../components/DataTable.jsx";
 import ErrorState from "../components/ErrorState.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import PageHeader from "../components/PageHeader.jsx";
-import { getErrorMessage, getServiceNowIncidents } from "../services/api.js";
+import { getErrorMessage, getServiceNowIncidents } from "../services/api";
 import { formatDate, safeValue } from "../utils/formatters.js";
 import { normalizeIncidents } from "../utils/normalizers.js";
 

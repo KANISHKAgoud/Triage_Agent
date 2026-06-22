@@ -4,7 +4,7 @@ import AgentPlayground from "./pages/AgentPlayground.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Incidents from "./pages/Incidents.jsx";
 import JiraTickets from "./pages/JiraTickets.jsx";
-import ProcessTickets from "./pages/ProcessTickets.jsx";
+import ProcessTickets from "./pages/ProcessTickets";
 
 export default function App() {
   return (
