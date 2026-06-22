@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import type {
   AgentResponse,
+  AgentRequest,
   ApiErrorResponse,
   DashboardResponse,
   JiraIssuesResponse,
@@ -23,6 +24,12 @@ export function getJiraIssues(): Promise<JiraIssuesResponse> {
   return api.get<JiraIssuesResponse>("/jira/issues").then((response) => response.data);
 }
 
+export function getJiraIssue(issueKey: string): Promise<import("../types/api").JiraIssue> {
+  return api
+    .get<import("../types/api").JiraIssue>(`/jira/issue/${encodeURIComponent(issueKey)}`)
+    .then((response) => response.data);
+}
+
 export function getUnprocessedJiraTickets(): Promise<UnprocessedTicketsResponse> {
   return api.get<UnprocessedTicketsResponse>("/jira/unprocessed").then((response) => response.data);
 }
@@ -42,13 +49,19 @@ export function getServiceNowIncidents(): Promise<ServiceNowIncidentsResponse> {
 }
 
 export function runAgent(query: string): Promise<AgentResponse> {
+  const payload: AgentRequest = {
+    query,
+    session_id: "frontend-session",
+  };
+
   return api
-    .post<AgentResponse>("/agent", {
-      search_query: query,
-      query,
-      session_id: "frontend-session",
+    .post<AgentResponse>("/agent/query", payload, {
+      timeout: 180000,
     })
-    .then((response) => response.data);
+    .then((response) => {
+      console.log("Agent Playground backend response:", response.data);
+      return response.data;
+    });
 }
 
 export function getErrorMessage(error: unknown): string {

@@ -1,5 +1,7 @@
 """API route definitions for the Triage Agent service."""
 
+import re
+
 from backend.storage_service import get_triage_history
 from backend.langgraph_service import process_query_langgraph
 from fastapi import APIRouter, HTTPException, status
@@ -17,6 +19,7 @@ from backend.ticket_storage import get_tickets
 from backend.servicenow_storage import get_incidents
 from backend.vector_service import get_vector_stats
 from backend.jira_processed_storage import (
+    get_processed_ticket,
     is_processed,
     mark_processed,
 )
@@ -45,6 +48,178 @@ from .models import (
 router = APIRouter()
 
 
+def extract_jira_text(node):
+    def collect_text(node):
+        if isinstance(node, str):
+            return [node]
+
+        if isinstance(node, list):
+            values = []
+            for item in node:
+                values.extend(collect_text(item))
+            return values
+
+        if not isinstance(node, dict):
+            return []
+
+        values = []
+
+        text = node.get("text")
+        if text:
+            values.append(text)
+
+        for child in node.get("content", []):
+            values.extend(collect_text(child))
+
+        return values
+
+    return "\n".join(
+        text
+        for text in collect_text(node)
+        if text
+    )
+
+
+def extract_jira_description(issue):
+
+    description = (
+        issue.get("fields", {})
+        .get("description")
+    )
+
+    if not description:
+        return ""
+
+    return extract_jira_text(description)
+
+
+def extract_latest_ai_comment(issue):
+
+    comments = (
+        issue.get("fields", {})
+        .get("comment", {})
+        .get("comments", [])
+    )
+
+    parsed_comments = []
+
+    for comment in comments:
+        body_text = extract_jira_text(
+            comment.get("body", {})
+        )
+
+        category_match = re.search(
+            r"Category:\s*(.+)",
+            body_text,
+            re.IGNORECASE,
+        )
+        subcategory_match = re.search(
+            r"Subcategory:\s*(.+)",
+            body_text,
+            re.IGNORECASE,
+        )
+        resolution_match = re.search(
+            r"Resolution:\s*([\s\S]+)",
+            body_text,
+            re.IGNORECASE,
+        )
+
+        if not (
+            category_match
+            or subcategory_match
+            or resolution_match
+        ):
+            continue
+
+        parsed_comments.append(
+            {
+                "created": comment.get("created", ""),
+                "category": (
+                    category_match.group(1).strip()
+                    if category_match
+                    else None
+                ),
+                "subcategory": (
+                    subcategory_match.group(1).strip()
+                    if subcategory_match
+                    else None
+                ),
+                "resolution": (
+                    resolution_match.group(1).strip()
+                    if resolution_match
+                    else None
+                ),
+            }
+        )
+
+    if not parsed_comments:
+        return None
+
+    return sorted(
+        parsed_comments,
+        key=lambda item: item.get("created") or "",
+    )[-1]
+
+
+def enrich_jira_issue(issue):
+
+    issue_key = issue.get("key") or issue.get("issue_key")
+    fields = issue.get("fields", {})
+    processed_ticket = get_processed_ticket(issue_key) if issue_key else None
+    latest_ai_comment = extract_latest_ai_comment(issue)
+
+    category = (
+        latest_ai_comment.get("category")
+        if latest_ai_comment and latest_ai_comment.get("category")
+        else processed_ticket.get("category")
+        if processed_ticket
+        else None
+    )
+    subcategory = (
+        latest_ai_comment.get("subcategory")
+        if latest_ai_comment and latest_ai_comment.get("subcategory")
+        else processed_ticket.get("subcategory")
+        if processed_ticket
+        else None
+    )
+    resolution = (
+        latest_ai_comment.get("resolution")
+        if latest_ai_comment and latest_ai_comment.get("resolution")
+        else processed_ticket.get("resolution")
+        if processed_ticket
+        else None
+    )
+
+    has_ai_result = (
+        processed_ticket is not None
+        or latest_ai_comment is not None
+    )
+
+    issue["ai_status"] = "Triaged" if has_ai_result else "Pending"
+    issue["processed"] = has_ai_result
+    issue["category"] = category
+    issue["subcategory"] = subcategory
+    issue["resolution"] = resolution
+    issue["jira_status"] = (
+        fields.get("status", {})
+        .get("name")
+        if isinstance(fields.get("status"), dict)
+        else fields.get("status")
+    )
+    issue["created_date"] = fields.get("created")
+    issue["summary"] = fields.get("summary") or issue.get("summary")
+    issue["description"] = (
+        extract_jira_description(issue)
+        or (
+            processed_ticket.get("description")
+            if processed_ticket
+            else ""
+        )
+    )
+
+    return issue
+
+
 @router.get(
     "/",
     summary="API health welcome",
@@ -60,6 +235,12 @@ async def read_root() -> dict[str, str]:
 
 @router.post(
     "/agent",
+    response_model=AgentResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Process a user query",
+)
+@router.post(
+    "/agent/query",
     response_model=AgentResponse,
     status_code=status.HTTP_200_OK,
     summary="Process a user query",
@@ -332,6 +513,16 @@ async def jira_issues():
 
     data = get_jira_issues()
 
+    issues = data.get(
+        "issues",
+        []
+    )
+
+    data["issues"] = [
+        enrich_jira_issue(issue)
+        for issue in issues
+    ]
+
     return data
 
 
@@ -339,6 +530,8 @@ async def jira_issues():
 async def jira_issue(issue_key: str):
 
     data = get_jira_issue(issue_key)
+
+    data = enrich_jira_issue(data)
 
     return data
 
@@ -445,7 +638,12 @@ async def jira_process_all():
             jira_comment,
         )
         mark_processed(
-            issue_key
+            issue_key,
+            result["predicted_category"],
+            result["predicted_subcategory"],
+            result["recommended_resolution"],
+            issue["fields"]["summary"],
+            description,
         )
 
         results.append(
@@ -543,7 +741,12 @@ Resolution:
     )
 
     mark_processed(
-        issue_key
+        issue_key,
+        result["predicted_category"],
+        result["predicted_subcategory"],
+        result["recommended_resolution"],
+        issue["fields"]["summary"],
+        description,
     )
 
     return {

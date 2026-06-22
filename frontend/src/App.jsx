@@ -3,7 +3,7 @@ import Layout from "./components/Layout.jsx";
 import AgentPlayground from "./pages/AgentPlayground.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Incidents from "./pages/Incidents.jsx";
-import JiraTickets from "./pages/JiraTickets.jsx";
+import JiraTickets from "./pages/JiraTickets";
 import ProcessTickets from "./pages/ProcessTickets";
 
 export default function App() {

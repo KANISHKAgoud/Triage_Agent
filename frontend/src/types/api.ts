@@ -11,9 +11,19 @@ export interface JiraIssue {
   key?: string;
   issue_key?: string;
   summary?: string;
+  description?: string;
+  ai_status?: "Triaged" | "Pending" | string;
+  processed?: boolean;
+  category?: string | null;
+  subcategory?: string | null;
+  resolution?: string | null;
+  jira_status?: string | null;
+  created_date?: string | null;
   status?: string | { name?: string };
   fields?: {
     summary?: string;
+    description?: unknown;
+    created?: string;
     status?: {
       name?: string;
     };
@@ -86,6 +96,11 @@ export interface AgentResponse {
   confidence_score: number;
   recommended_resolution: string;
   retrieved_incidents: RetrievedIncident[];
+}
+
+export interface AgentRequest {
+  query: string;
+  session_id: string;
 }
 
 export interface ApiErrorResponse {

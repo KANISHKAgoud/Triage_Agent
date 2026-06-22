@@ -55,9 +55,14 @@ def get_jira_issue(issue_key):
         "Accept": "application/json"
     }
 
+    params = {
+        "fields": "summary,description,status,created,comment"
+    }
+
     response = requests.get(
         url,
         headers=headers,
+        params=params,
         auth=auth,
     )
 
