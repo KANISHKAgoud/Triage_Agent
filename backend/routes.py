@@ -16,6 +16,10 @@ from backend.vector_service import get_vector_stats
 from backend.ticket_storage import get_tickets
 from backend.servicenow_storage import get_incidents
 from backend.vector_service import get_vector_stats
+from backend.jira_processed_storage import (
+    is_processed,
+    mark_processed,
+)
 from backend.jira_service import add_jira_comment
 from backend.jira_storage import (
     get_jira_issues,
@@ -399,6 +403,9 @@ async def jira_process_all():
 
     for issue_key in issue_keys:
 
+        if is_processed(issue_key):
+            continue
+
         issue = get_jira_issue(
             issue_key
         )
@@ -425,17 +432,20 @@ async def jira_process_all():
         )
 
         jira_comment = f"""
-Category: {result['predicted_category']}
+        Category: {result['predicted_category']}
 
-Subcategory: {result['predicted_subcategory']}
+        Subcategory: {result['predicted_subcategory']}
 
-Resolution:
-{result['recommended_resolution']}
-"""
+        Resolution:
+        {result['recommended_resolution']}
+        """
 
         add_jira_comment(
             issue_key,
             jira_comment,
+        )
+        mark_processed(
+            issue_key
         )
 
         results.append(
