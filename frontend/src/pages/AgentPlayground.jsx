@@ -13,8 +13,32 @@ const incidentColumns = [
   { key: "issueName", header: "Issue" },
   { key: "category", header: "Category" },
   { key: "subcategory", header: "Subcategory" },
-  { key: "score", header: "Score", render: (row) => formatPercent(row.score) },
-  { key: "resolution", header: "Resolution", render: (row) => <span className="line-clamp-3">{row.resolution}</span> },
+
+  {
+    key: "rootCause",
+    header: "Root Cause",
+    render: (row) => (
+      <span className="line-clamp-3">
+        {row.rootCause}
+      </span>
+    ),
+  },
+
+  {
+    key: "score",
+    header: "Score",
+    render: (row) => formatPercent(row.score),
+  },
+
+  {
+    key: "resolution",
+    header: "Resolution",
+    render: (row) => (
+      <span className="line-clamp-3">
+        {row.resolution}
+      </span>
+    ),
+  },
 ];
 
 export default function AgentPlayground() {

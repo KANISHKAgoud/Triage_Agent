@@ -54,6 +54,7 @@ export function normalizeRetrievedIncidents(data) {
     issueName: incident?.issue_name || "—",
     category: incident?.category || "—",
     subcategory: incident?.subcategory || "—",
+    rootCause: incident?.root_cause || "—",
     score: incident?.score,
     resolution: incident?.resolution || "—",
   }));
