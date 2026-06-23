@@ -740,6 +740,13 @@ Resolution:
         jira_comment,
     )
 
+    from backend.ticket_status_storage import set_status
+
+    set_status(
+        issue_key,
+        "TRIAGED"
+    )
+
     mark_processed(
         issue_key,
         result["predicted_category"],
@@ -754,4 +761,14 @@ Resolution:
         "category": result["predicted_category"],
         "subcategory": result["predicted_subcategory"],
         "resolution": result["recommended_resolution"],
+    }
+
+@router.get("/jira/status/{issue_key}")
+async def jira_status(issue_key: str):
+
+    from backend.ticket_status_storage import get_status
+
+    return {
+        "issue_key": issue_key,
+        "status": get_status(issue_key)
     }
