@@ -36,7 +36,9 @@ export function getUnprocessedJiraTickets(): Promise<UnprocessedTicketsResponse>
 
 export function processJiraTicket(issueKey: string): Promise<ProcessTicketResponse> {
   return api
-    .post<ProcessTicketResponse>(`/jira/process-ticket/${encodeURIComponent(issueKey)}`)
+    .post<ProcessTicketResponse>(
+      `/jira/process-ticket/${encodeURIComponent(issueKey)}`
+    )
     .then((response) => response.data);
 }
 

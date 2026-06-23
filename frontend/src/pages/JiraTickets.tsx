@@ -1,11 +1,18 @@
 import type { ReactNode } from "react";
 import { Eye, RefreshCw, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+
 import DataTable from "../components/DataTable.jsx";
 import ErrorState from "../components/ErrorState.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import PageHeader from "../components/PageHeader.jsx";
-import { getErrorMessage, getJiraIssue, getJiraIssues } from "../services/api";
+import {
+  getErrorMessage,
+  getJiraIssue,
+  getJiraIssues,
+  processJiraTicket,
+} from "../services/api";
+
 import type { JiraIssue } from "../types/api";
 import { formatDate, safeValue } from "../utils/formatters.js";
 
@@ -170,6 +177,7 @@ function DetailBlock({ label, value }: { label: string; value: ReactNode }) {
 export default function JiraTickets() {
   const [rows, setRows] = useState<JiraTicketRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [selectedIssue, setSelectedIssue] = useState<JiraIssue | null>(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
@@ -192,6 +200,22 @@ export default function JiraTickets() {
   useEffect(() => {
     loadIssues();
   }, [loadIssues]);
+
+  async function handleProcessTicket(issueKey: string) {
+  try {
+    setProcessing(issueKey);
+
+    await processJiraTicket(issueKey);
+
+    await loadIssues();
+
+    alert(`Ticket ${issueKey} processed successfully`);
+  } catch (err) {
+    alert(getErrorMessage(err));
+  } finally {
+    setProcessing(null);
+  }
+}
 
   async function handleOpenIssue(issueKey: string) {
     setIsModalOpen(true);
@@ -226,19 +250,34 @@ export default function JiraTickets() {
     { key: "aiStatus", header: "AI Status", render: (row: JiraTicketRow) => <AiStatusBadge value={row.aiStatus} /> },
     { key: "category", header: "Category" },
     {
-      key: "action",
-      header: "Action",
-      render: (row: JiraTicketRow) => (
+  key: "action",
+  header: "Action",
+  render: (row: JiraTicketRow) => (
+    <div className="flex gap-2">
+
+      <button
+        className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-white/10"
+        onClick={() => handleOpenIssue(row.key)}
+        type="button"
+      >
+        <Eye size={15} />
+        View
+      </button>
+
+      {row.aiStatus !== "Triaged" && (
         <button
-          className="focus-ring inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white"
-          onClick={() => handleOpenIssue(row.key)}
+          className="focus-ring rounded-md bg-accent-500 px-3 py-2 text-xs font-semibold text-black hover:bg-accent-600"
+          disabled={processing === row.key}
+          onClick={() => handleProcessTicket(row.key)}
           type="button"
         >
-          <Eye size={15} />
-          View Details
+          {processing === row.key ? "Processing..." : "Process"}
         </button>
-      ),
-    },
+      )}
+
+    </div>
+  ),
+}
   ];
 
   return (
