@@ -97,10 +97,25 @@ export default function AgentPlayground() {
                     <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Subcategory</p>
                     <p className="mt-2 text-lg font-semibold text-white">{safeValue(result.predicted_subcategory)}</p>
                   </div>
+
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Confidence Score</p>
-                    <p className="mt-2 text-lg font-semibold text-white">{formatPercent(result.confidence_score)}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Confidence Score
+                    </p>
+
+                    <p
+                      className={`mt-2 text-lg font-semibold ${
+                        result.confidence_score >= 0.8
+                          ? "text-green-400"
+                          : result.confidence_score >= 0.6
+                          ? "text-yellow-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {formatPercent(result.confidence_score)}
+                    </p>
                   </div>
+
                 </div>
                 <div className="mt-5 border-t border-white/10 pt-5">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Resolution</p>
