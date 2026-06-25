@@ -3,7 +3,7 @@ from langgraph.graph import END, StateGraph
 from backend.src.graph.state import AgentState
 from backend.src.nodes.save_node import save_node
 
-from backend.src.services.llm_service import LLMServiceError, generate_triage_response
+
 from backend.src.nodes.retrieve_node import retrieve_node
 from backend.src.nodes.confidence_node import confidence_node
 
@@ -11,8 +11,11 @@ from backend.src.nodes.keyword_boost_node import keyword_boost_node
 from backend.src.utils.keyword_boost import has_hardware_keyword
 from backend.src.nodes.response_node import response_node
 
-from backend.src.nodes.llm_node import llm_node
-from backend.src.nodes.classify_node import classify_node
+
+from backend.src.nodes.reasoning_node import reasoning_node
+from backend.src.nodes.category_node import category_node
+from backend.src.nodes.subcategory_node import subcategory_node
+
 from backend.src.nodes.resolution_node import resolution_node
 
 from backend.ticket_status import (
@@ -51,43 +54,18 @@ def _get_top_category_prediction(
 builder = StateGraph(AgentState)
 
 builder.add_node(
-    "retrieve",
-    retrieve_node,
+    "reasoning",
+    reasoning_node,
 )
 
 builder.add_node(
-    "keyword_boost",
-    keyword_boost_node,
+    "category",
+    category_node,
 )
 
 builder.add_node(
-    "llm",
-    llm_node,
-)
-
-builder.add_node(
-    "classify",
-    classify_node,
-)
-
-builder.add_node(
-    "resolution",
-    resolution_node,
-)
-
-builder.add_node(
-    "confidence",
-    confidence_node,
-)
-
-builder.add_node(
-    "response",
-    response_node,
-)
-
-builder.add_node(
-    "save",
-    save_node,
+    "subcategory",
+    subcategory_node,
 )
 
 builder.set_entry_point("retrieve")
@@ -96,32 +74,33 @@ builder.add_edge(
     "retrieve",
     "keyword_boost",
 )
-
 builder.add_edge(
     "keyword_boost",
     "confidence",
 )
-
 builder.add_edge(
     "confidence",
-    "llm",
+    "reasoning",
 )
 
 builder.add_edge(
-    "llm",
-    "classify",
+    "reasoning",
+    "category",
 )
 
 builder.add_edge(
-    "classify",
+    "category",
+    "subcategory",
+)
+
+builder.add_edge(
+    "subcategory",
     "resolution",
 )
-
 builder.add_edge(
     "resolution",
     "save",
 )
-
 builder.add_edge(
     "save",
     "response",
