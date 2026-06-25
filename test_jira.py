@@ -1,4 +1,4 @@
-from backend.jira_service import create_jira_ticket
+from backend.src.services.jira_service import create_jira_ticket
 
 create_jira_ticket(
     ticket_id="MAIL-999",

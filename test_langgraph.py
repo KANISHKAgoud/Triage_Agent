@@ -1,4 +1,4 @@
-from backend.langgraph_service import graph
+from backend.src.graph.langgraph_service import graph
 
 result = graph.invoke(
     {

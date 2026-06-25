@@ -1,4 +1,4 @@
-from backend.postgres_storage import (
+from backend.src.storage.postgres_storage import (
     update_ticket_status_pg,
 )
 

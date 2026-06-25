@@ -1,11 +1,11 @@
-from backend.langgraph_service import process_query_langgraph
-from backend.outlook_service import mark_email_processed
-from backend.email_service import send_triage_email
-from backend.ticket_storage import create_ticket
-from backend.ticket_service import update_ticket_status
+from backend.src.graph.langgraph_service import process_query_langgraph
+from backend.src.services.outlook_service import mark_email_processed
+from backend.src.services.email_service import send_triage_email
+from backend.src.storage.ticket_storage import create_ticket
+from backend.src.services.ticket_service import update_ticket_status
 from backend.ticket_status import PROCESSING
-from backend.servicenow_service import create_incident
-from backend.jira_service import create_jira_ticket
+from backend.src.services.servicenow_service import create_incident
+from backend.src.services.jira_service import create_jira_ticket
 
 def process_email(email):
 

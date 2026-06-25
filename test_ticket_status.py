@@ -1,6 +1,6 @@
 # test_ticket_status.py
 
-from backend.postgres_service import get_pg_connection
+from backend.src.services.postgres_service import get_pg_connection
 
 conn = get_pg_connection()
 

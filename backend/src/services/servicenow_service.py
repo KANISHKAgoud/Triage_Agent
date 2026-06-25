@@ -1,4 +1,4 @@
-from backend.servicenow_storage import save_incident
+from backend.src.storage.servicenow_storage import save_incident
 
 
 def create_incident(
