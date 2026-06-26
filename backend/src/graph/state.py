@@ -8,8 +8,6 @@ class AgentState(TypedDict):
 
     # Retrieval
     retrieved_incidents: list[dict[str, Any]]
-    
-    llm_result: dict
 
     # LLM output (raw)
     llm_result: dict[str, Any]
@@ -19,3 +17,9 @@ class AgentState(TypedDict):
     predicted_subcategory: str
     recommended_resolution: str
     confidence_score: float
+
+    # Metrics
+    node_metrics: dict[str, float]
+
+    # Debug
+    execution_path: list[str]

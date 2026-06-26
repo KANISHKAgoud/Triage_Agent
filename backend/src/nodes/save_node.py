@@ -8,7 +8,9 @@ from backend.ticket_status import TRIAGED
 
 def save_node(state: AgentState):
 
-    print("Saving Triage Result")
+    from backend.src.utils.logger import logger
+
+    logger.info("Running save Node")
 
     save_triage_result(
         ticket_id=state["ticket_id"],

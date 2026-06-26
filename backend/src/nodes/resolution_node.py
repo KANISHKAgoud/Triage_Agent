@@ -1,6 +1,8 @@
 def resolution_node(state):
 
-    print("Running Resolution Node")
+    from backend.src.utils.logger import logger
+
+    logger.info("Running Resolution Node")
 
     return {
         "recommended_resolution":

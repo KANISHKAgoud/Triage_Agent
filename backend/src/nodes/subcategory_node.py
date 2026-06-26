@@ -1,6 +1,8 @@
 def subcategory_node(state):
 
-    print("Running Subcategory Node")
+    from backend.src.utils.logger import logger
+
+    logger.info("Running subcategory Node")
 
     return {
         "predicted_subcategory":

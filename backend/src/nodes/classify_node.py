@@ -3,7 +3,9 @@ from backend.src.graph.state import AgentState
 
 def classify_node(state: AgentState):
 
-    print("Running Classify Node")
+    from backend.src.utils.logger import logger
+
+    logger.info("Running classify Node")
 
     result = state.get("llm_result", {})
 

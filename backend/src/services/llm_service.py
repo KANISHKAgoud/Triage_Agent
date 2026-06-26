@@ -1,5 +1,6 @@
 """Azure OpenAI service for generating triage recommendations."""
 
+
 from __future__ import annotations
 
 import json
@@ -8,13 +9,22 @@ from functools import lru_cache
 from typing import Any
 
 from dotenv import load_dotenv
+from backend.src.prompts.system_prompt import SYSTEM_PROMPT
+from backend.src.prompts.category_prompt import CATEGORY_PROMPT
+from backend.src.prompts.subcategory_prompt import SUBCATEGORY_PROMPT
+from backend.src.prompts.resolution_prompt import RESOLUTION_PROMPT
+from backend.src.prompts.output_format import OUTPUT_FORMAT
 
 
 DEFAULT_AZURE_OPENAI_API_VERSION = "2024-02-15-preview"
-TRIAGE_SYSTEM_PROMPT = (
-    "You are an internal banking IT support triage assistant. "
-    "Use the retrieved historical incidents to infer the most likely category, "
-    "subcategory, and recommended resolution. Return only valid JSON."
+TRIAGE_SYSTEM_PROMPT = "\n\n".join(
+    [
+        SYSTEM_PROMPT,
+        CATEGORY_PROMPT,
+        SUBCATEGORY_PROMPT,
+        RESOLUTION_PROMPT,
+        OUTPUT_FORMAT,
+    ]
 )
 
 
@@ -82,24 +92,23 @@ def _format_incident_for_prompt(incident: dict[str, Any]) -> str:
     )
 
 
-def _build_prompt(query: str, retrieved_incidents: list[dict[str, Any]]) -> str:
-    """Build the user prompt from the query and retrieved incident context."""
-
+def _build_prompt(
+    query: str,
+    retrieved_incidents: list[dict[str, Any]],
+) -> str:
     incidents_context = "\n\n---\n\n".join(
-        _format_incident_for_prompt(incident) for incident in retrieved_incidents
+        _format_incident_for_prompt(incident)
+        for incident in retrieved_incidents
     )
 
     return f"""
-User query:
+Current User Issue:
+
 {query}
 
-Retrieved historical incidents:
-{incidents_context}
+Retrieved Historical Incidents:
 
-Return a JSON object with exactly these keys:
-- category
-- subcategory
-- recommended_resolution
+{incidents_context}
 """.strip()
 
 
@@ -150,7 +159,11 @@ def generate_triage_response(
             response_format={"type": "json_object"},
         )
     except Exception as exc:
-        raise LLMServiceError("Azure OpenAI request failed.") from exc
+        print("========== AZURE ERROR ==========")
+        print(type(exc))
+        print(exc)
+        print("=================================")
+        raise
 
     message = completion.choices[0].message.content
     if not message:

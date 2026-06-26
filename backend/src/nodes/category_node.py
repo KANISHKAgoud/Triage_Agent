@@ -1,6 +1,8 @@
 def category_node(state):
 
-    print("Running Category Node")
+    from backend.src.utils.logger import logger
+
+    logger.info("Running category Node")
 
     return {
         "predicted_category":

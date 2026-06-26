@@ -5,7 +5,9 @@ UNKNOWN_CATEGORY_THRESHOLD = 0.30
 
 def confidence_node(state: AgentState):
 
-    print("Running Confidence Node")
+    from backend.src.utils.logger import logger
+
+    logger.info("Running confidence Node")
 
     incidents = state["retrieved_incidents"]
 
