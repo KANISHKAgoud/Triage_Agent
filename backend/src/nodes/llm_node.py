@@ -1,5 +1,5 @@
 from backend.src.graph.state import AgentState
-from backend.src.services.llm_service import (
+from backend.src.services.llm.llm_service import (
     generate_triage_response,
     LLMServiceError,
 )

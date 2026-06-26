@@ -1,4 +1,4 @@
-from backend.src.services.llm_service import generate_triage_response
+from backend.src.services.llm.llm_service import generate_triage_response
 
 def reasoning_node(state):
 

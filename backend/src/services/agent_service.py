@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from backend.src.services.llm_service import LLMServiceError, generate_triage_response
+from backend.src.services.llm.llm_service import LLMServiceError, generate_triage_response
 from rag.search import search_incidents
 
 
