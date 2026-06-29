@@ -18,6 +18,12 @@ class AgentState(TypedDict):
     recommended_resolution: str
     confidence_score: float
 
+    reasoning: str
+
+    priority: str
+
+    requires_manual_review: bool
+
     # Metrics
     node_metrics: dict[str, float]
 

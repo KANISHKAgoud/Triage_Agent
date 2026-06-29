@@ -54,9 +54,22 @@ def process_email(email):
 
     send_triage_email(
         recipient="oakcompasshub@outlook.com",
+        ticket_id=email["id"],
+        issue=query,
         category=result["predicted_category"],
         subcategory=result["predicted_subcategory"],
         resolution=result["recommended_resolution"],
+        confidence=f'{result["confidence_score"]:.2%}',
+
+        priority="Medium",
+
+        incident_id=result["retrieved_incidents"][0]["ticket_id"],
+
+        incident_name=result["retrieved_incidents"][0]["issue_name"],
+
+        similarity=f'{result["retrieved_incidents"][0]["score"]:.2%}',
+
+        previous_resolution=result["retrieved_incidents"][0]["resolution"],
     )
 
     mark_email_processed(email["id"])
