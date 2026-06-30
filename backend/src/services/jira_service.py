@@ -56,10 +56,16 @@ def create_jira_ticket(
         json=payload,
         headers=headers,
         auth=auth,
+        timeout=20,
     )
 
+    print("=" * 60)
+    print("JIRA CREATE RESPONSE")
     print(response.status_code)
     print(response.text)
+    print("=" * 60)
+
+    response.raise_for_status()
 
     return response.json()
 

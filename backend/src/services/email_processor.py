@@ -53,7 +53,8 @@ def process_email(email):
     )
 
     send_triage_email(
-        recipient="oakcompasshub@outlook.com",
+        # recipient="oakcompasshub@outlook.com",
+        recipient="",
         ticket_id=email["id"],
         issue=query,
         category=result["predicted_category"],

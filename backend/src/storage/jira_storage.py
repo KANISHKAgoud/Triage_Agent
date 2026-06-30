@@ -56,7 +56,7 @@ def get_jira_issue(issue_key):
     }
 
     params = {
-        "fields": "summary,description,status,created,comment"
+        "fields": "summary,description,status,created,comment,reporter,creator"
     }
 
     response = requests.get(

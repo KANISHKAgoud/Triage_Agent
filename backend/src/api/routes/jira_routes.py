@@ -9,6 +9,8 @@ from backend.src.storage.ticket_status_storage import (
     get_status,
 )
 
+from backend.src.services.email_service import send_triage_email
+
 
 from backend.src.storage.jira_storage import (
     get_jira_issues,
@@ -389,6 +391,12 @@ async def process_single_ticket(
         issue_key
     )
 
+    reporter_email = (
+        issue["fields"]
+        .get("reporter", {})
+        .get("emailAddress")
+    )
+
     try:
 
         description = (
@@ -424,6 +432,38 @@ async def process_single_ticket(
         jira_comment,
     )
 
+    from backend.src.services.email_service import send_triage_email
+
+    if reporter_email:
+
+        send_triage_email(
+            recipient=reporter_email,
+
+            ticket_id=issue_key,
+
+            issue=description,
+
+            category=result["predicted_category"],
+
+            subcategory=result["predicted_subcategory"],
+
+            resolution=result["recommended_resolution"],
+
+            confidence=f'{result["confidence_score"]:.2%}',
+
+            priority=result["priority"],
+
+            incident_id=result["retrieved_incidents"][0]["ticket_id"],
+
+            incident_name=result["retrieved_incidents"][0]["issue_name"],
+
+            similarity=f'{result["retrieved_incidents"][0]["score"]:.2%}',
+
+            previous_resolution=result["retrieved_incidents"][0]["resolution"],
+        )
+
+        print(f"Email sent to {reporter_email}")
+
 
     set_status(
         issue_key,
@@ -438,6 +478,34 @@ async def process_single_ticket(
         issue["fields"]["summary"],
         description,
     )
+
+    send_triage_email(
+        # recipient="oakcompasshub@outlook.com",
+        recipient="",
+
+        ticket_id=issue_key,
+
+        issue=description,
+
+        category=result["predicted_category"],
+
+        subcategory=result["predicted_subcategory"],
+
+        resolution=result["recommended_resolution"],
+
+        confidence=f'{result["confidence_score"]:.2%}',
+
+        priority=result["priority"],
+
+        incident_id=result["retrieved_incidents"][0]["ticket_id"],
+
+        incident_name=result["retrieved_incidents"][0]["issue_name"],
+
+        similarity=f'{result["retrieved_incidents"][0]["score"]:.2%}',
+
+        previous_resolution=result["retrieved_incidents"][0]["resolution"],
+    )
+
 
     return {
         "issue_key": issue_key,

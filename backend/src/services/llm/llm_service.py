@@ -96,9 +96,13 @@ def generate_triage_response(
         raise LLMServiceError(str(exc))
 
     required = [
+        "reasoning",
         "category",
         "subcategory",
+        "priority",
+        "confidence",
         "recommended_resolution",
+        "requires_manual_review",
     ]
 
     for key in required:

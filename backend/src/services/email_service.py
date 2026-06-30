@@ -21,6 +21,10 @@ def send_triage_email(
     similarity,
     previous_resolution,
 ):
+    
+    from datetime import datetime
+
+    generated_date = datetime.now().strftime("%d-%m-%Y %H:%M")
 
     html = f"""
     <!DOCTYPE html>

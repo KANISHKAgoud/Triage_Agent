@@ -12,5 +12,13 @@ def reasoning_node(state):
     )
 
     return {
-        "llm_result": result
+        "llm_result": result,
+
+        "reasoning": result["reasoning"],
+
+        "priority": result["priority"],
+
+        "confidence_score": result["confidence"],
+
+        "requires_manual_review": result["requires_manual_review"],
     }
